@@ -1,9 +1,5 @@
+import { User } from "@/models/User";
 import { create } from "zustand";
-
-interface User {
-  id: string;
-  name: string;
-}
 
 interface UserStore {
   user: User | null;

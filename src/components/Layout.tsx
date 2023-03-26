@@ -1,20 +1,26 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useEffect } from "react";
 import { AppShell } from "@mantine/core";
 import MyNavbar from "./MyNavbar";
 import { useUserStore } from "../lib/userStore";
 import SignIn from "@/pages/SignIn";
+import { User } from "../models/User";
 
 export default function Layout({ children }: PropsWithChildren) {
   const { user } = useUserStore();
-  const isLoggedIn = user !== null;
-  console.log("Layout.tsx: isLoggedIn = ", isLoggedIn);
+  const notSignIn = user === null;
 
-  if (!isLoggedIn) {
+  useEffect(() => {
+    console.log("Layout");
+    const newUser: User = null;
+    useUserStore.setState({ user: newUser });
+  }, []);
+
+  if (notSignIn) {
     return <SignIn />;
   }
 
   return (
-    <AppShell navbar={<MyNavbar />} hidden={!isLoggedIn}>
+    <AppShell navbar={<MyNavbar />} hidden={notSignIn}>
       <div>{children}</div>
     </AppShell>
   );
