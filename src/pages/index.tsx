@@ -12,9 +12,12 @@ import { useDebouncedState } from "@mantine/hooks";
 import { IconKey, IconLogin, IconUser } from "@tabler/icons-react";
 import illustration from "@/assets/IllustrationProjectManager/SVG/Illustration2.svg";
 import { useUserStore } from "@/lib/userStore";
-import  User  from "@/models/User";
+import User from "@/models/User";
+import { useRouter } from "next/router";
 
 export default function index() {
+  const router = useRouter();
+
   const [id, setID] = useDebouncedState<string>("", 200);
   const [password, setPassword] = useDebouncedState<string>("", 200);
   const handleIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,11 +32,11 @@ export default function index() {
     event.preventDefault();
     const newUser: User = {
       id: id,
-      name: "test",
+      name: "ทดสอบ พนักงาน",
       role: "employee",
     };
     setUser(newUser);
-    console.log(newUser);
+    router.reload();
   };
 
   return (

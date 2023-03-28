@@ -9,7 +9,7 @@ import {
   Group,
   ThemeIcon,
   UnstyledButton,
-Image,
+  Image,
 } from "@mantine/core";
 import {
   IconHistory,
@@ -20,7 +20,8 @@ import {
 } from "@tabler/icons-react";
 import React from "react";
 import NavLink from "./_NavLink";
-import repair from '@/assets/SVG/repair.svg'
+import repair from "@/assets/SVG/repair.svg";
+import { useRouter } from "next/router";
 interface NavLinkData {
   icon: React.ReactNode;
   label: string;
@@ -29,6 +30,8 @@ interface NavLinkData {
   href: string;
 }
 export default function MyNavbar() {
+  const router = useRouter();
+
   const user: User = useUserStore((state) => state.user);
   // const user: User = {role : 'admin'}
   const displayName = user.name ? user.name : "ไม่พบชื่อผู้ใช้";
@@ -63,6 +66,12 @@ export default function MyNavbar() {
       href: "/Employee/profile",
     },
   ];
+
+  const handleSignOut = () => {
+    useUserStore.getState().signOut();
+    router.reload();
+  };
+
   return (
     <Navbar p="md" height="100vh" width={{ base: 250 }}>
       <Navbar.Section
@@ -73,10 +82,14 @@ export default function MyNavbar() {
           justifyContent: "start",
         }}
       >
-        <Image src={repair} width={'3.5rem'} mr={'sm'} mt={'-0.7rem'} />
-        <Text fz={"md"} fw={600} sx={{
-          flexGrow: 1,
-        }}>
+        <Image src={repair} width={"3.5rem"} mr={"sm"} mt={"-0.7rem"} />
+        <Text
+          fz={"md"}
+          fw={600}
+          sx={{
+            flexGrow: 1,
+          }}
+        >
           ระบบแจ้งซ่อมออนไลน์
         </Text>
       </Navbar.Section>
@@ -95,6 +108,7 @@ export default function MyNavbar() {
       </Navbar.Section>
       <Navbar.Section>
         <UnstyledButton
+          onClick={handleSignOut}
           sx={(theme) => ({
             display: "block",
             width: "100%",
