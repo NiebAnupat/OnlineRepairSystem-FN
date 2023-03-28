@@ -2,19 +2,15 @@
 
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { User } from "@/models/User";
 
 export function middleware(request: NextRequest) {
-  // const user = request.cookies.get("user")?.value;
-  // const user: User = { id: "1", name: "John Doe", role: "admin" };
-  const user: User = null;
-  // console.log("user", user);
-
-  if (!user && !request.nextUrl.pathname.startsWith("/SignIn"))
-    return NextResponse.redirect(new URL("/SignIn", request.url));
+  const user = request.cookies.get("user")?.value;
+  if (!user && request.nextUrl.pathname !== "/")
+    return NextResponse.redirect(new URL("/", request.url));
   else if (user) {
-    const { role } = user!;
-    if (request.nextUrl.pathname.startsWith("/SignIn")) {
+    console.log("user", user);
+    const { role } = JSON.parse(user);
+    if (request.nextUrl.pathname === "/") {
       switch (role) {
         case "employee":
           return NextResponse.redirect(new URL("/Employee", request.url));
@@ -27,17 +23,16 @@ export function middleware(request: NextRequest) {
       }
     } else if (request.nextUrl.pathname.startsWith("/Employee")) {
       if (role !== "employee")
-        return NextResponse.redirect(new URL("/SignIn", request.url));
+        return NextResponse.redirect(new URL("/", request.url));
     } else if (request.nextUrl.pathname.startsWith("/Worker")) {
       if (role !== "worker")
-        return NextResponse.redirect(new URL("/SignIn", request.url));
+        return NextResponse.redirect(new URL("/", request.url));
     } else if (request.nextUrl.pathname.startsWith("/Admin")) {
       if (role !== "admin")
-        return NextResponse.redirect(new URL("/SignIn", request.url));
+        return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
-  return NextResponse.next();
 }
 
 // See "Matching Paths" below to learn more

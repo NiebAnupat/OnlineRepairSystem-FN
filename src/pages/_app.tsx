@@ -2,10 +2,6 @@ import Layout from "@/components/Layout";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { MantineProvider, Global } from "@mantine/core";
-import { useUserStore } from "@/lib/userStore";
-import SignIn from "./SignIn";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 function MyGlobalStyles() {
   return (

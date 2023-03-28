@@ -1,9 +1,6 @@
 import React from "react";
+import { Text } from "@mantine/core";
 
 export default function index() {
-  return (
-    <>
-      <h1>Admin</h1>
-    </>
-  );
+  return <Text>Admin</Text>;
 }
