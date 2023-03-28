@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -23,5 +23,9 @@
     "react-dom": "18.2.0",
     "typescript": "5.0.2",
     "zustand": "^4.3.6"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^7.0.0",
+    "url-loader": "^4.1.1"
   }
 }

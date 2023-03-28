@@ -1,7 +1,11 @@
 import Layout from "@/components/Layout";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { MantineProvider, Global } from '@mantine/core';
+import { MantineProvider, Global } from "@mantine/core";
+import { useUserStore } from "@/lib/userStore";
+import SignIn from "./SignIn";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 function MyGlobalStyles() {
   return (
@@ -23,13 +27,15 @@ function MyGlobalStyles() {
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <MantineProvider withGlobalStyles
-    withNormalizeCSS
-    theme={{
-      colorScheme: 'light',
-      fontFamily: 'Noto Sans Thai',
-      primaryColor: 'indigo',
-    }}>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: "light",
+        fontFamily: "Noto Sans Thai",
+        primaryColor: "indigo",
+      }}
+    >
       <Layout>
         <Component {...pageProps} />
       </Layout>

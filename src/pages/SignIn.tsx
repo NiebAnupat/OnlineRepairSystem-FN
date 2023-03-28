@@ -13,10 +13,10 @@ import { IconKey, IconLogin, IconUser } from "@tabler/icons-react";
 import illustration from "@/assets/IllustrationProjectManager/SVG/Illustration2.svg";
 import { useUserStore } from "@/lib/userStore";
 import { User } from "@/models/User";
+
 export default function SignIn() {
   const [id, setID] = useDebouncedState<string>("", 200);
   const [password, setPassword] = useDebouncedState<string>("", 200);
-
   const handleIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setID(event.target.value);
   };
@@ -26,13 +26,14 @@ export default function SignIn() {
 
   const { setUser } = useUserStore();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // event.preventDefault();
+    event.preventDefault();
     const newUser: User = {
       id: id,
       name: "test",
+      role: "employee",
     };
     setUser(newUser);
-    // console.log(newUser);
+    console.log(newUser);
   };
 
   return (
@@ -40,7 +41,7 @@ export default function SignIn() {
       <Box h={"100vh"} w={"100vw"} p={"xl"} bg={"gray.1"}>
         <Container
           h={"100%"}
-          size={"xl"}
+          size={"90vw"}
           sx={{
             minWidth: "80rem",
             minHeight: "40rem",
