@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import {
   TextInput,
   Button,
@@ -7,16 +8,25 @@ import {
   Box,
   Image,
   PasswordInput,
+  Notification,
 } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks";
 import { IconKey, IconLogin, IconUser } from "@tabler/icons-react";
 import illustration from "@/assets/IllustrationProjectManager/SVG/Illustration2.svg";
 import { useUserStore } from "@/lib/userStore";
-import User from "@/models/User";
-import { useRouter } from "next/router";
+import User, { UserSignInResponse } from "@/models/User";
+import useAxios from "@/lib/useAxios";
+import axios from "axios";
 
 export default function index() {
   const router = useRouter();
+  const { setUser } = useUserStore();
+
+  const idRef = React.useRef<HTMLInputElement>(null);
+  const passwordRef = React.useRef<HTMLInputElement>(null);
+
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>("");
 
   const [id, setID] = useDebouncedState<string>("", 200);
   const [password, setPassword] = useDebouncedState<string>("", 200);
@@ -27,20 +37,97 @@ export default function index() {
     setPassword(event.target.value);
   };
 
-  const { setUser } = useUserStore();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const newUser: User = {
-      id: id,
-      name: "ทดสอบ พนักงาน",
-      role: "employee",
-    };
-    setUser(newUser);
-    router.reload();
+    setLoading(true);
+    try {
+      const res = await useAxios.post<UserSignInResponse>("auth/", {
+        user_id: id,
+        password: password,
+      });
+
+      const token = res.data.token;
+
+      // save token to cookie
+      document.cookie = `token=${token}; path=/`;
+
+      router.reload();
+    } catch (e: any) {
+      setLoading(false);
+      if (axios.isAxiosError(e)) {
+        idRef.current?.value && (idRef.current.value = "");
+        passwordRef.current?.value && (passwordRef.current.value = "");
+        const status = e.response?.status;
+        if (status === 401) {
+          setError("รหัสผ่านไม่ถูกต้อง");
+        } else if (status === 404) {
+          setError("ไม่พบรหัสพนักงานนี้");
+        } else {
+          setError("เกิดข้อผิดพลาด");
+        }
+      } else {
+        setError("เกิดข้อผิดพลาด");
+      }
+
+      setTimeout(() => {
+        setError("");
+      }, 2000);
+    }
   };
+
+  const renderError = () => (
+    <Notification
+      color="red"
+      radius="md"
+      title="เกิดข้อผิดพลาด"
+      sx={(theme) => ({
+        textAlign: "center",
+        position: "absolute",
+        bottom: "0",
+        left: "0",
+        right: "0",
+        margin: "auto",
+        marginBottom: theme.spacing.lg,
+        width: "80%",
+        zIndex: 2,
+        opacity: error ? 1 : 0,
+        transition: "opacity 0.5s",
+      })}
+      withCloseButton={false}
+    >
+      {error}
+    </Notification>
+  );
+
+  const renderLoading = () => (
+    <Notification
+      color="blue"
+      radius="md"
+      loading
+      title="กำลังเข้าสู่ระบบ"
+      sx={(theme) => ({
+        textAlign: "center",
+        position: "absolute",
+        bottom: "0",
+        left: "0",
+        right: "0",
+        margin: "auto",
+        marginBottom: theme.spacing.lg,
+        width: "80%",
+        zIndex: 2,
+        opacity: loading ? 1 : 0,
+        transition: "opacity 0.5s",
+      })}
+      withCloseButton={false}
+    >
+      กรุณารอสักครู่
+    </Notification>
+  );
 
   return (
     <Box h={"100vh"} w={"100vw"} p={"xl"} bg={"gray.1"}>
+      {renderLoading()}
+      {renderError()}
       <Container
         h={"100%"}
         size={"90vw"}
@@ -89,8 +176,6 @@ export default function index() {
                 borderRadius: "44% 56% 69% 31% / 33% 39% 61% 67% ",
                 width: "40rem",
                 height: "30rem",
-                // width: "40vw",
-                // height: "30vw",
                 position: "absolute",
                 opacity: 0.8,
                 zIndex: 0,
@@ -123,6 +208,7 @@ export default function index() {
                   label="รหัสพนักงาน"
                   onChange={handleIDChange}
                   icon={<IconUser />}
+                  ref={idRef}
                 />
                 <PasswordInput
                   mt={"sm"}
@@ -130,16 +216,18 @@ export default function index() {
                   label="รหัสผ่าน"
                   onChange={handlePasswordChange}
                   icon={<IconKey />}
+                  ref={passwordRef}
                 />
                 <Button
                   mt={"xl"}
                   type="submit"
                   w={"80%"}
+                  loading={loading}
                   variant="gradient"
                   gradient={{ from: "indigo", to: "cyan" }}
                   leftIcon={<IconLogin />}
                 >
-                  เข้าสู่ระบบ
+                  {loading ? "กำลังเข้าสู่ระบบ" : "เข้าสู่ระบบ"}
                 </Button>
               </form>
             </Container>

@@ -18,7 +18,7 @@ import {
   IconTableOptions,
   IconUser,
 } from "@tabler/icons-react";
-import React from "react";
+import React, { useEffect } from "react";
 import NavLink from "./_NavLink";
 import repair from "@/assets/SVG/repair.svg";
 import { useRouter } from "next/router";
@@ -31,11 +31,11 @@ interface NavLinkData {
 }
 export default function MyNavbar() {
   const router = useRouter();
+  const user: User | null = useUserStore((state) => state.user);
+  const displayName = user && user.username ? user.username : "ไม่พบชื่อผู้ใช้";
+  const displayRole =
+    user && user.user_role ? user.user_role : "ไม่พบสิทธิ์ผู้ใช้";
 
-  const user: User = useUserStore((state) => state.user);
-  // const user: User = {role : 'admin'}
-  const displayName = user.name ? user.name : "ไม่พบชื่อผู้ใช้";
-  const displayRole = user.role ? user.role : "ไม่พบสิทธิ์ผู้ใช้";
   const navLinkData_Employee: NavLinkData[] = [
     {
       icon: <IconHome />,
@@ -71,6 +71,22 @@ export default function MyNavbar() {
     useUserStore.getState().signOut();
     router.reload();
   };
+
+  // display role in thai
+  const displayRoleInThai = () => { 
+    switch (displayRole) { 
+      case "admin": return "ผู้ดูแลระบบ";
+      case "employee": return "พนักงานทั่วไป";
+      case "worker": return "ช่างซ่อม";
+      default: return "ไม่พบสิทธิ์ผู้ใช้";
+    }
+  }
+
+  // convert buffer to url
+  const bufferToUrl = (buffer: Buffer) => { 
+    const blob = new Blob([buffer], { type: "image/png" });
+    return URL.createObjectURL(blob);
+  }
 
   return (
     <Navbar p="md" height="100vh" width={{ base: 250 }}>
@@ -128,7 +144,7 @@ export default function MyNavbar() {
               <IconLogout />
             </ThemeIcon>
 
-            <Text size="sm">"ออกจากระบบ"</Text>
+            <Text size="sm">ออกจากระบบ</Text>
           </Group>
         </UnstyledButton>
       </Navbar.Section>
@@ -141,7 +157,8 @@ export default function MyNavbar() {
         }}
       >
         <Avatar
-          src={"https://api.multiavatar.com/07af9730d100f0cf16.png"}
+          src={user && user.avatar ? bufferToUrl(user.avatar) : undefined}
+          radius={"xl"}
           size={"3rem"}
           ml={"md"}
         />
@@ -150,7 +167,7 @@ export default function MyNavbar() {
             {displayName}
           </Text>
           <Text fz={"sm"} c="dimmed">
-            {displayRole}
+            {displayRoleInThai()}
           </Text>
         </Box>
       </Navbar.Section>
