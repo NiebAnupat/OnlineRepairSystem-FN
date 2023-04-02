@@ -46,7 +46,7 @@ export default function MyNavbar() {
     },
     {
       icon: <IconTableOptions />,
-      label: "การแจ้งซ่อม",
+      label: "แจ้งซ่อม",
       color: "green",
       colorLevel: 6,
       href: "/Employee/repairing",

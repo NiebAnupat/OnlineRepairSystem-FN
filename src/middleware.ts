@@ -1,39 +1,41 @@
-// middleware.ts
-
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import User from "./models/User";
-import { useUserStore } from "./lib/userStore";
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   try {
-    if (!token && request.nextUrl.pathname !== "/")
+    if (!token && request.nextUrl.pathname !== "/") {
       return NextResponse.redirect(new URL("/", request.url));
-    else if (token) {
-      const res = await fetch(`http://localhost:4000/auth/${token}`);
+    } else if (token) {
+      const res = await fetch(`${process.env.API_BASE_URL}auth/${token}`);
       if (res.status === 200) {
-        const {user_role} = (await res.json()) as User;
-        if (request.nextUrl.pathname === "/") {
-          switch (user_role) {
-            case "employee":
+        const { user_role } = (await res.json()) as User;
+        const pathArr = request.nextUrl.pathname.split("/");
+        switch (user_role) {
+          case "employee":
+            if (request.nextUrl.pathname === "/") {
               return NextResponse.redirect(new URL("/Employee", request.url));
-            case "worker":
+            } else if (pathArr[1] !== "Employee") {
+              return NextResponse.redirect(new URL("/", request.url));
+            }
+            break;
+          case "worker":
+            if (request.nextUrl.pathname === "/") {
               return NextResponse.redirect(new URL("/Worker", request.url));
-            case "admin":
+            } else if (pathArr[1] !== "Worker") {
+              return NextResponse.redirect(new URL("/", request.url));
+            }
+            break;
+          case "admin":
+            if (request.nextUrl.pathname === "/") {
               return NextResponse.redirect(new URL("/Admin", request.url));
-            default:
-              return NextResponse.next();
-          }
-        } else if (request.nextUrl.pathname.startsWith("/Employee")) {
-          if (user_role !== "employee")
-            return NextResponse.redirect(new URL("/", request.url));
-        } else if (request.nextUrl.pathname.startsWith("/Worker")) {
-          if (user_role !== "worker")
-            return NextResponse.redirect(new URL("/", request.url));
-        } else if (request.nextUrl.pathname.startsWith("/Admin")) {
-          if (user_role !== "admin")
-            return NextResponse.redirect(new URL("/", request.url));
+            } else if (pathArr[1] !== "Admin") {
+              return NextResponse.redirect(new URL("/", request.url));
+            }
+            break;
+          default:
+            return NextResponse.next();
         }
       }
     }
@@ -41,6 +43,8 @@ export async function middleware(request: NextRequest) {
     console.log(error);
   }
 }
+
+
 
 // See "Matching Paths" below to learn more
 export const config = {
@@ -54,4 +58,7 @@ export const config = {
      */
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
+  api: {
+    bodyParser: false,
+  },
 };
