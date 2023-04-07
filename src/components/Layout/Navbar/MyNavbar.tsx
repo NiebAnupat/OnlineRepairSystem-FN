@@ -1,36 +1,22 @@
-import { useUserStore } from "@/lib/userStore";
+import {useUserStore} from "@/lib/userStore";
 import User from "@/models/User";
-import {
-  Text,
-  Navbar,
-  Avatar,
-  Divider,
-  Box,
-  Group,
-  ThemeIcon,
-  UnstyledButton,
-  Image,
-} from "@mantine/core";
-import {
-  IconHistory,
-  IconHome,
-  IconLogout,
-  IconTableOptions,
-  IconUser,
-} from "@tabler/icons-react";
-import React, { useEffect } from "react";
+import {Avatar, Box, Divider, Group, Image, Navbar, Text, ThemeIcon, UnstyledButton,} from "@mantine/core";
+import {IconHistory, IconHome, IconLogout, IconTableOptions, IconUser,} from "@tabler/icons-react";
+import React from "react";
 import NavLink from "./_NavLink";
 import repair from "@/assets/SVG/repair.svg";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
+
 interface NavLinkData {
-  icon: React.ReactNode;
-  label: string;
-  color: string;
-  colorLevel: number;
-  href: string;
+    icon: React.ReactNode;
+    label: string;
+    color: string;
+    colorLevel: number;
+    href: string;
 }
+
 export default function MyNavbar() {
-  const router = useRouter();
+    const router = useRouter();
   const user: User | null = useUserStore((state) => state.user);
   const displayName = user && user.username ? user.username : "ไม่พบชื่อผู้ใช้";
   const displayRole =
@@ -63,30 +49,34 @@ export default function MyNavbar() {
       label: "ข้อมูลส่วนตัว",
       color: "orange",
       colorLevel: 5,
-      href: "/Employee/profile",
+        href: "/Employee/profile",
     },
   ];
 
-  const handleSignOut = () => {
-    useUserStore.getState().signOut();
-    router.reload();
-  };
+    const handleSignOut = () => {
+        useUserStore.getState().signOut();
+        router.reload();
+    };
 
-  // display role in thai
-  const displayRoleInThai = () => { 
-    switch (displayRole) { 
-      case "admin": return "ผู้ดูแลระบบ";
-      case "employee": return "พนักงานทั่วไป";
-      case "worker": return "ช่างซ่อม";
-      default: return "ไม่พบสิทธิ์ผู้ใช้";
+    // display role in thai
+    const displayRoleInThai = () => {
+        switch (displayRole) {
+            case "admin":
+                return "ผู้ดูแลระบบ";
+            case "employee":
+                return "พนักงานทั่วไป";
+            case "worker":
+                return "ช่างซ่อม";
+            default:
+                return "ไม่พบสิทธิ์ผู้ใช้";
+        }
     }
-  }
 
-  // convert buffer to url
-  const bufferToUrl = (buffer: Buffer) => { 
-    const blob = new Blob([buffer], { type: "image/png" });
-    return URL.createObjectURL(blob);
-  }
+    // convert buffer to url
+    const bufferToUrl = (buffer: Buffer) => {
+        const blob = new Blob([buffer], {type: "image/png"});
+        return URL.createObjectURL(blob);
+    }
 
   return (
     <Navbar p="md" height="100vh" width={{ base: 250 }}>

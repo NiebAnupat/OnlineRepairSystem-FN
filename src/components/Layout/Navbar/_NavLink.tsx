@@ -1,13 +1,13 @@
 import React from "react";
-import { useRouter } from "next/router";
-import { Box, Group, ThemeIcon, UnstyledButton, Text } from "@mantine/core";
+import {useRouter} from "next/router";
+import {Group, Text, ThemeIcon, UnstyledButton} from "@mantine/core";
 
 interface Props {
-  icon: React.ReactNode;
-  label: string;
-  href: string;
-  color: string;
-  colorLevel: number;
+    icon: React.ReactNode;
+    label: string;
+    href: string;
+    color: string;
+    colorLevel: number;
 }
 
 export default function NavLink({
