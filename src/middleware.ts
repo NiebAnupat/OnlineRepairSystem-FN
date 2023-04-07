@@ -4,6 +4,7 @@ import User from "./models/User";
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
+
   try {
     if (!token && request.nextUrl.pathname !== "/") {
       return NextResponse.redirect(new URL("/", request.url));
