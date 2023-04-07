@@ -21,7 +21,6 @@ export default function Index({children}: PropsWithChildren) {
     }
 
     if (isSignOuting) return <LoadingScreen/>;
-    // if (true) return <LoadingScreen/>;
     return (
         <AppShell navbar={<MyNavbar/>} padding={0} hidden={!user || isIndex}>
             <div style={{

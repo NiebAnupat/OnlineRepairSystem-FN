@@ -10,7 +10,6 @@ export const LoadingScreen = () => {
                     <Loader size={'lg'}/>
                     <Text mt={'xl'}
                           sx={{
-                              // dot animation
                               display: 'inline-block',
                               clipPath: 'inset(0 3ch 0 0)',
                               animation: 'l 1s steps(4) infinite',
@@ -21,7 +20,7 @@ export const LoadingScreen = () => {
                                   }
                               }
                           }}
-                    >กำลังออกจากระบบ&nbsp;.&nbsp;.&nbsp;.
+                    >กำลังออกจากระบบ&ensp;.&ensp;.&ensp;.
                     </Text>
 
                 </Center>

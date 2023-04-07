@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/.idea/.gitignore
+/.idea/sonarlint/issuestore/d/2/d2d3bb60cab7e8c869b5fdf0a820b7edf2fc7859
+/.idea/sonarlint/securityhotspotstore/d/2/d2d3bb60cab7e8c869b5fdf0a820b7edf2fc7859
+/.idea/Frontend.iml
+/.idea/sonarlint/issuestore/index.pb
+/.idea/sonarlint/securityhotspotstore/index.pb
+/.idea/modules.xml
+/.idea/rcb-settings.xml
+/.idea/vcs.xml

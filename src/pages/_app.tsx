@@ -1,7 +1,9 @@
 import Layout from "@/components/Layout";
 import "@/styles/globals.css";
 import type {AppProps} from "next/app";
-import {MantineProvider, Global} from "@mantine/core";
+import {Global, MantineProvider} from "@mantine/core";
+import {DevSupport} from "@react-buddy/ide-toolbox-next";
+import {ComponentPreviews, useInitial} from "@/components/dev";
 
 function MyGlobalStyles() {
     return (
@@ -33,7 +35,11 @@ export default function App({Component, pageProps}: AppProps) {
             }}
         >
             <Layout>
-                <Component {...pageProps} />
+                <DevSupport ComponentPreviews={ComponentPreviews}
+                            useInitialHook={useInitial}
+                >
+                    <Component {...pageProps} />
+                </DevSupport>
             </Layout>
         </MantineProvider>
     );
