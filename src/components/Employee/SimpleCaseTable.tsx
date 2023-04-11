@@ -59,17 +59,19 @@ const SimpleCaseTable: FunctionComponent<Props> = (props) => {
 
     return (
         <>
-            <Paper
-                p={'lg'}
-                radius='lg'
-                mt={'md'}
-                shadow='md'
-                sx={{
-                    flexGrow: 1,
-                    '&:hover': {
-                        boxShadow: '4px 12px 41px 0px rgba(50,0,150,0.1)',
-                    },
-                }}
+            <Tooltip label={'รายละเอียดคร่าว ๆ'} color={'indigo.5'} position={'top'} withArrow offset={15}
+                     transitionProps={{transition: 'slide-up', duration: 300}}>
+                <Paper
+                    p={'lg'}
+                    radius='lg'
+                    mt={'md'}
+                    shadow='md'
+                    sx={{
+                        flexGrow: 1,
+                        '&:hover': {
+                            boxShadow: '4px 12px 41px 0px rgba(50,0,150,0.1)',
+                        },
+                    }}
             >
                 <Table verticalSpacing={'md'}>
                     <thead>
@@ -94,7 +96,7 @@ const SimpleCaseTable: FunctionComponent<Props> = (props) => {
                                 })}</td>
                                 <td style={{textAlign: 'center'}}>{renderStatus(item.status_id)}</td>
                                 <td style={{textAlign: 'center'}}>
-                                    <Tooltip label={'ดูรายละเอียด'} color={'indigo'} withArrow position="right"
+                                    <Tooltip label={'ดูรายละเอียด'} color={'violet.4'} withArrow position="right"
                                              transitionProps={{transition: 'scale-x', duration: 300}}>
                                         <ActionIcon mx={'auto'} variant="subtle" radius={'xl'} size={'lg'}
                                                     color={'indigo.9'}>
@@ -108,15 +110,16 @@ const SimpleCaseTable: FunctionComponent<Props> = (props) => {
                     </tbody>
 
                 </Table>
-                <Center>
-                    <Pagination
-                        style={{marginTop: '16px'}}
-                        total={Math.ceil(props.cases!.length / itemsPerPage)}
-                        value={pagination.active}
-                        onChange={pagination.setPage}
-                    />
-                </Center>
-            </Paper>
+                    <Center>
+                        <Pagination
+                            style={{marginTop: '16px'}}
+                            total={Math.ceil(props.cases!.length / itemsPerPage)}
+                            value={pagination.active}
+                            onChange={pagination.setPage}
+                        />
+                    </Center>
+                </Paper>
+            </Tooltip>
         </>
     );
 };
