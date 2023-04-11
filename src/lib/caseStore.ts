@@ -10,6 +10,18 @@ interface CaseStore {
     setLastCase: (lastCase: LastCase) => void;
 }
 
+
+export const useCaseStore = create<CaseStore>((set) => ({
+    cases: [],
+    lastCase: null,
+    setCases: (newCases: Case[]) => {
+        set({cases: newCases});
+    },
+    setLastCase: (newLastCase: LastCase) => {
+        set({lastCase: newLastCase});
+    },
+}));
+
 const fetchCases = async (): Promise<Case[] | null> => {
     const baseURL = "http://localhost:4000/";
     try {
@@ -25,17 +37,6 @@ const fetchCases = async (): Promise<Case[] | null> => {
         return Promise.resolve(null);
     }
 };
-
-export const useCaseStore = create<CaseStore>((set) => ({
-    cases: [],
-    lastCase: null,
-    setCases: (newCases: Case[]) => {
-        set({cases: newCases});
-    },
-    setLastCase: (newLastCase: LastCase) => {
-        set({lastCase: newLastCase});
-    },
-}));
 
 export const initialCases = async () => {
     const cases = await fetchCases();

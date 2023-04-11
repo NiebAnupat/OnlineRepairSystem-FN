@@ -1,5 +1,5 @@
 import React, {FunctionComponent} from 'react';
-import {LastCase} from "@/models/Case";
+import {LastCase, StatusID} from "@/models/Case";
 import {Flex, Paper, Text, UnstyledButton} from "@mantine/core";
 
 interface OwnProps {
@@ -10,47 +10,54 @@ type Props = OwnProps;
 
 const LastCaseCard: FunctionComponent<Props> = (props) => {
     const {lastCase} = props;
-    if (lastCase) {
-        return (
-            <UnstyledButton
-                mt={"xl"}
-                w={"500px"}
-                sx={{
-                    "&:hover": {
-                        transform: "translateY(-5px)",
-                        transition: "all 0.2s ease-in-out",
-                    },
-                    transition: "transform 0.2s ease-in-out",
-                }}
-            >
+
+    const getStatusColor = (statusID: number) => {
+        switch (statusID) {
+            case StatusID.PENDING:
+                return 'yellow';
+            case StatusID.IN_PROGRESS:
+                return 'blue';
+            case StatusID.REPAIRING:
+                return 'indigo';
+            case StatusID.REPAIRED:
+                return 'green';
+            default :
+                return 'gray';
+
+        }
+    }
+
+
+    return (
+        <UnstyledButton
+            w={"600px"}
+            sx={{
+                "&:hover": {
+                    transform: "translateY(-5px)",
+                    transition: "all 0.2s ease-in-out",
+                },
+                transition: "transform 0.2s ease-in-out",
+            }}
+        >
+            {lastCase ? (
                 <Paper p={"lg"} radius="lg" shadow="md" sx={{
                     "&:hover": {
                         "boxShadow": "4px 12px 41px 0px rgba(50,0,150,0.1)"
-                    }
+                    },
+                    // add ripple effect
+
                 }}>
                     <Flex justify={"space-between"}>
-                        <Text>สถานนะการแจ้งซ่อมล่าสุด</Text>
+                        <Text>สถานะการแจ้งซ่อมล่าสุด</Text>
                         <Text>รหัส: {lastCase.case_id}</Text>
                     </Flex>
-                    <Text align="center" m={"lg"}>
-                        รอการตรวจสอบ {lastCase.status_id}
+                    <Text align="center" m={"lg"} fz={'lg'} fw={600}
+                          c={getStatusColor(lastCase.statuses.status_id)}>
+                        {lastCase.statuses.status_name}
                     </Text>
+                    <Text fz={'xs'} c="dimmed" align={'end'}>กดเพื่อดูรายละเอียด</Text>
                 </Paper>
-            </UnstyledButton>
-        )
-    } else {
-        return (
-            <UnstyledButton
-                mt={"xl"}
-                w={"500px"}
-                sx={{
-                    "&:hover": {
-                        transform: "translateY(-5px)",
-                        transition: "all 0.2s ease-in-out",
-                    },
-                    transition: "transform 0.2s ease-in-out",
-                }}
-            >
+            ) : (
                 <Paper p={"lg"} radius="lg" shadow="md" sx={{
                     "&:hover": {
                         "boxShadow": "4px 12px 41px 0px rgba(50,0,150,0.1)"
@@ -61,10 +68,9 @@ const LastCaseCard: FunctionComponent<Props> = (props) => {
                         ไม่พบการแจ้งซ่อมล่าสุด
                     </Text>
                 </Paper>
-            </UnstyledButton>
-
-        )
-    }
+            )}
+        </UnstyledButton>
+    )
 };
 
 export default LastCaseCard;
