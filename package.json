@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^7.0.0",
+    "@types/cookie": "^0.5.1",
     "url-loader": "^4.1.1"
   }
 }
