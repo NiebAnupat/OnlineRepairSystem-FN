@@ -77,7 +77,7 @@ const SimpleCaseTable: FunctionComponent<Props> = (props) => {
                     <thead>
                     <tr>
                         <th style={{width: '10%', textAlign: 'center'}}>รหัส</th>
-                        <th style={{textAlign: 'center', width: '40%'}}>ชื่อ</th>
+                        <th style={{textAlign: 'center', width: '40%'}}>หัวข้อ</th>
                         <th style={{textAlign: 'center', width: '15%'}}>วันที่</th>
                         <th style={{textAlign: 'center', width: '15%'}}>สถานะ</th>
                         <th style={{textAlign: 'center'}}>ดำเนินการ</th>

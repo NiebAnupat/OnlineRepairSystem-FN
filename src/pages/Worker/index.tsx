@@ -1,6 +1,10 @@
 import React from "react";
-import { Text } from '@mantine/core';
+import {Box, Container} from '@mantine/core';
 
-export default function index() {
-  return <Text>Worker</Text>;
+export default function Index() {
+    return <>
+        <Box bg={"gray.1"} h={"100%"} pt={'xl'}>
+            <Container size={"90%"}>ช่างซ่อม</Container>
+        </Box>
+    </>;
 }

@@ -38,6 +38,8 @@ export async function middleware(request: NextRequest) {
                         return NextResponse.next();
                 }
             } else {
+                // delete token
+                request.cookies.set("token", "");
                 return NextResponse.redirect(new URL("/", request.url));
             }
         }
