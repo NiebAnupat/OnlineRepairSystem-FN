@@ -31,8 +31,8 @@ export default function Repairing() {
 
 
     const [droppedImage, setDroppedImage] = useState<File | null>(null);
-    const suffleImage = useInterval(() => {
-        // suffle images every 5 seconds
+    const shuffleImage = useInterval(() => {
+        // shuffle images every 5 seconds
         if (form.values.images.length > 0) {
             setDroppedImage(form.values.images[Math.floor(Math.random() * form.values.images.length)]);
         }
@@ -43,10 +43,10 @@ export default function Repairing() {
         // Update dropped image when images in form change
         if (form.values.images.length > 1) {
             setDroppedImage(form.values.images[0]);
-            suffleImage.start();
-            return suffleImage.stop;
+            shuffleImage.start();
+            return shuffleImage.stop;
         } else if (form.values.images.length === 1) {
-            suffleImage.stop();
+            shuffleImage.stop();
             setDroppedImage(form.values.images[0]);
         } else {
             setDroppedImage(null)

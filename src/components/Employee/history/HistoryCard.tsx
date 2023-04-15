@@ -18,16 +18,16 @@ const HistoryCard: FunctionComponent<Props> = (props) => {
     const {images, name_case, statuses, case_id, place_case} = props.case;
     const [thumbnail, setThumbnail] = useState<Buffer>();
 
-    const suffleImage = useInterval(() => {
-        // suffle images every 5 seconds
+    const shuffleImage = useInterval(() => {
+        // shuffle images every 5 seconds
         if (images.length > 0) {
             setThumbnail(images[Math.floor(Math.random() * images.length)].image);
         }
     }, 5000);
 
     useEffect(() => {
-        suffleImage.start();
-        return suffleImage.stop;
+        shuffleImage.start();
+        return shuffleImage.stop;
     }, [])
 
     useEffect(() => {
@@ -41,6 +41,7 @@ const HistoryCard: FunctionComponent<Props> = (props) => {
     }
 
     const viewDetail = () => {
+        // TODO: view detail
         modals.open({
             title: `รายละเอียดของ ${name_case}`,
             size: 'xl',

@@ -8,6 +8,10 @@ import {IconSearch} from "@tabler/icons-react";
 export default function History() {
     const cases: Case[] | null = useCaseStore((state) => state.cases);
     // const cases: Case[] | null = []
+
+    const search = () => {
+        // TODO : make search case by name, id, status, place, date, etc.
+    }
     return <>
         <Box bg={"gray.1"} h={"100%"} pt={'xl'} sx={{userSelect: 'none'}}>
             <Container size={"90%"} pb={'xl'}>
