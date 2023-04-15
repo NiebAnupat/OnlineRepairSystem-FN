@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {Box, Container, Divider, Flex, Text, Title,} from "@mantine/core";
-import {initialCases, useCaseStore} from "@/lib/caseStore";
+import {useCaseStore} from "@/lib/caseStore";
 import {useUserStore} from "@/lib/userStore";
 import User from "@/models/User";
 import Case, {LastCase, StatusID} from "@/models/Case";
-import LastCaseCard from "@/components/Employee/LastCaseCard";
-import PendingCard from "@/components/Employee/PendingCard";
-import SimpleCaseTable from "@/components/Employee/SimpleCaseTable";
+import LastCaseCard from "@/components/Employee/index/LastCaseCard";
+import PendingCard from "@/components/Employee/index/PendingCard";
+import SimpleCaseTable from "@/components/Employee/index/SimpleCaseTable";
 
 export default function Index() {
 
@@ -23,7 +23,6 @@ export default function Index() {
         minute: 'numeric',
     }));
     useEffect(() => {
-        initialCases()
         const interval = setInterval(() => {
             setCurrentTime(new Date().toLocaleTimeString('th-TH', {
                 hour: 'numeric',

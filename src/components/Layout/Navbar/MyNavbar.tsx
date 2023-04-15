@@ -6,6 +6,7 @@ import React from "react";
 import NavLink from "./_NavLink";
 import repair from "@/assets/SVG/repair.svg";
 import {useRouter} from "next/router";
+import {bufferToUrl} from "@/lib/helper";
 
 interface NavLinkData {
     icon: React.ReactNode;
@@ -72,11 +73,6 @@ export default function MyNavbar() {
         }
     }
 
-    // convert buffer to url
-    const bufferToUrl = (buffer: Buffer) => {
-        const blob = new Blob([buffer], {type: "image/png"});
-        return URL.createObjectURL(blob);
-    }
 
     return (
         <Navbar p="md" height="100vh" width={{base: 250}} sx={{

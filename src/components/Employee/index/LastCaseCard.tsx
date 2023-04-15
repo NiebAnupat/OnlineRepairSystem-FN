@@ -46,8 +46,6 @@ const LastCaseCard: FunctionComponent<Props> = (props) => {
                         "&:hover": {
                             "boxShadow": "4px 12px 41px 0px rgba(50,0,150,0.1)"
                         },
-                        // add ripple effect
-
                     }}>
                         <Flex justify={"space-between"}>
                             <Text>สถานะการแจ้งซ่อมล่าสุด</Text>

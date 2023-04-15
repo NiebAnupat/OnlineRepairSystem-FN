@@ -1,8 +1,9 @@
 import {Box, Button, Container, Flex, Paper, Space, Text, Textarea, TextInput, Title} from "@mantine/core";
 import {Dropzone, IMAGE_MIME_TYPE} from '@mantine/dropzone';
+import {notifications} from '@mantine/notifications';
 import React, {useEffect, useState} from "react";
 import {useForm} from "@mantine/form";
-import {IconMapPinFilled, IconNotes} from "@tabler/icons-react";
+import {IconCheck, IconExclamationCircle, IconMapPinFilled, IconNotes} from "@tabler/icons-react";
 import {useInterval} from "@mantine/hooks";
 import {useUserStore} from "@/lib/userStore";
 import useAxios from "@/lib/useAxios";
@@ -40,15 +41,27 @@ export default function Repairing() {
 
     useEffect(() => {
         // Update dropped image when images in form change
-        if (form.values.images.length > 0) {
+        if (form.values.images.length > 1) {
+            setDroppedImage(form.values.images[0]);
             suffleImage.start();
             return suffleImage.stop;
+        } else if (form.values.images.length === 1) {
+            suffleImage.stop();
+            setDroppedImage(form.values.images[0]);
         } else {
             setDroppedImage(null)
         }
     }, [form.values.images]);
 
     const handleSubmit = async (values: any) => {
+        notifications.show({
+            id: 'submitNotification',
+            title: 'กำลังรายงาน',
+            message: 'กำลังรายงาน กรุณารอสักครู่',
+            loading: true,
+            autoClose: false,
+            withCloseButton: false,
+        })
         try {
             const formData = new FormData();
             formData.append('user_id', userID);
@@ -63,7 +76,14 @@ export default function Repairing() {
 
             if (res.status === 200) {
                 clearForm();
-                console.log('success')
+                notifications.update({
+                    id: 'submitNotification',
+                    title: 'รายงานสำเร็จ',
+                    message: 'รายงานสำเร็จ กรุณารอการตรวจสอบจากเจ้าหน้าที่',
+                    color: 'teal',
+                    icon: <IconCheck/>,
+                    autoClose: 5000,
+                })
             }
 
         } catch (e) {
@@ -72,9 +92,23 @@ export default function Repairing() {
                 if (status === 400) {
                     form.setFieldError('images', 'กรุณาเพิ่มรูปภาพ');
                 } else if (status === 404) {
-                    console.log('รายงานไม่สำเร็จ')
+                    notifications.update({
+                        id: 'submitNotification',
+                        title: 'รายงานไม่สำเร็จ',
+                        message: 'รายงานไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+                        color: 'red',
+                        icon: <IconExclamationCircle/>,
+                        autoClose: 5000,
+                    })
                 } else {
-                    console.log(e.message)
+                    notifications.update({
+                        id: 'submitNotification',
+                        title: 'รายงานไม่สำเร็จ',
+                        message: 'รายงานไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+                        color: 'red',
+                        icon: <IconExclamationCircle/>,
+                        autoClose: 5000,
+                    })
                 }
             }
         }
@@ -99,7 +133,7 @@ export default function Repairing() {
                             <TextInput mt={'md'} label={'สถานที่'}
                                        icon={<IconMapPinFilled/>} {...form.getInputProps('place_case')}/>
                             <Flex mt={'md'} gap={'md'}>
-                                <Textarea label={'รายละเอียดการรายงาน'} w={'70%'}
+                                <Textarea label={'อธิบายรายละเอียดสิ่งที่ต้องการซ่อม'} w={'70%'}
                                           autosize
                                           minRows={10}
                                           maxRows={10}
@@ -118,7 +152,6 @@ export default function Repairing() {
                                         }}
                                         onDrop={(files) => {
                                             form.setFieldValue('images', files);
-                                            setDroppedImage(files[0]); // Update the dropped image state
                                         }}
                                         className="dropzone"
                                         style={{

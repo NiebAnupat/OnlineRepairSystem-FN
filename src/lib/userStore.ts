@@ -1,6 +1,7 @@
 import User from "../models/User";
 import {create} from "zustand";
 import {parseCookies, setCookie} from "nookies";
+import {initialCases} from "@/lib/caseStore";
 
 interface UserStore {
     user: User | null;
@@ -54,4 +55,5 @@ export const useUserStore = create<UserStore>((set) => ({
 
 initialUser().then((user) => {
     useUserStore.setState({user});
+    initialCases()
 });
