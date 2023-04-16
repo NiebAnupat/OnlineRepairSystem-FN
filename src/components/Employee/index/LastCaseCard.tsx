@@ -1,5 +1,5 @@
 import React, {FunctionComponent} from 'react';
-import {LastCase, StatusID} from "@/models/Case";
+import {getStatusColorByID, getStatusName, LastCase} from "@/models/Case";
 import {Flex, Paper, Text, Tooltip, UnstyledButton} from "@mantine/core";
 
 interface OwnProps {
@@ -10,22 +10,6 @@ type Props = OwnProps;
 
 const LastCaseCard: FunctionComponent<Props> = (props) => {
     const {lastCase} = props;
-
-    const getStatusColor = (statusID: number) => {
-        switch (statusID) {
-            case StatusID.PENDING:
-                return 'yellow';
-            case StatusID.IN_PROGRESS:
-                return 'blue';
-            case StatusID.REPAIRING:
-                return 'indigo';
-            case StatusID.REPAIRED:
-                return 'green';
-            default :
-                return 'gray';
-
-        }
-    }
 
 
     return (
@@ -52,8 +36,8 @@ const LastCaseCard: FunctionComponent<Props> = (props) => {
                             <Text>รหัส: {lastCase.case_id}</Text>
                         </Flex>
                         <Text align="center" m={"lg"} fz={'lg'} fw={600}
-                              c={getStatusColor(lastCase.statuses.status_id)}>
-                            {lastCase.statuses.status_name}
+                              c={getStatusColorByID(lastCase.status_id)}>
+                            {getStatusName(lastCase.status_id)}
                         </Text>
                         <Text fz={'xs'} c="dimmed" align={'end'}>กดเพื่อดูรายละเอียด</Text>
                     </Paper>

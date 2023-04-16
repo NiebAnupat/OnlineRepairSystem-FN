@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useEffect, useState} from 'react';
 import {ActionIcon, Badge, Center, Pagination, Paper, Table, Tooltip} from '@mantine/core';
 import {usePagination} from '@mantine/hooks';
 import Case, {StatusID, StatusName} from "@/models/Case";
@@ -16,7 +16,22 @@ const SimpleCaseTable: FunctionComponent<Props> = (props) => {
     const pagination = usePagination({total: props.cases!.length | 0, initialPage: 1});
 
     // Pagination
-    const itemsPerPage = 5;
+    const [itemsPerPage, setItemsPerPage] = useState<number>(3);
+
+    useEffect(() => {
+        const windowHeight = window.innerHeight;
+        if (windowHeight < 720) {
+            setItemsPerPage(3)
+        } else if (windowHeight < 800) {
+            setItemsPerPage(4)
+        } else if (windowHeight < 900) {
+            setItemsPerPage(5)
+        } else {
+            setItemsPerPage(6)
+        }
+
+    }, [])
+
 
     // render status chips
     const renderStatus = (statusID: number) => {
@@ -78,27 +93,26 @@ const SimpleCaseTable: FunctionComponent<Props> = (props) => {
                         </thead>
                         <tbody>
                         {
-                            props.cases?.map((item) => (
-                                <tr key={item.case_id}>
-                                    <td style={{textAlign: 'center'}}>{item.case_id}</td>
-                                    <td style={{textAlign: 'left'}}>{item.name_case}</td>
-                                    <td style={{textAlign: 'center'}}>{new Date(item.date_case).toLocaleDateString('th-TH', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: 'numeric',
-                                    })}</td>
-                                    <td style={{textAlign: 'center'}}>{renderStatus(item.status_id)}</td>
-                                    <td style={{textAlign: 'center'}}>
-                                        <Tooltip label={'ดูรายละเอียด'} color={'violet.4'} withArrow position="right"
-                                                 transitionProps={{transition: 'scale-x', duration: 300}}>
-                                            <ActionIcon mx={'auto'} variant="subtle" radius={'xl'} size={'lg'}
-                                                        color={'indigo.9'}>
-                                                <IconSearch size="1.125rem"/>
-                                            </ActionIcon>
-                                        </Tooltip>
-                                    </td>
-                                </tr>
-                            ))
+                            props.cases!.slice((pagination.active - 1) * itemsPerPage, pagination.active * itemsPerPage).map((item, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td style={{textAlign: 'center'}}>{item.case_id}</td>
+                                        <td style={{textAlign: 'left'}}>{item.name_case}</td>
+                                        <td style={{textAlign: 'center'}}>{new Date(item.date_case).toLocaleDateString('th-TH')}</td>
+                                        <td style={{textAlign: 'center'}}>{renderStatus(item.status_id)}</td>
+                                        <td style={{textAlign: 'center'}}>
+                                            <Tooltip label={'ดูรายละเอียด'} color={'violet.4'} withArrow
+                                                     position="right"
+                                                     transitionProps={{transition: 'scale-x', duration: 300}}>
+                                                <ActionIcon mx={'auto'} variant="subtle" radius={'xl'} size={'lg'}
+                                                            color={'indigo.9'}>
+                                                    <IconSearch size="1.125rem"/>
+                                                </ActionIcon>
+                                            </Tooltip>
+                                        </td>
+                                    </tr>
+                                )
+                            })
                         }
                         </tbody>
 

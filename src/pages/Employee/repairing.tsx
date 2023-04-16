@@ -8,10 +8,13 @@ import {useInterval} from "@mantine/hooks";
 import {useUserStore} from "@/lib/userStore";
 import useAxios from "@/lib/useAxios";
 import axios from "axios";
+import {useCaseStore} from "@/lib/caseStore";
 
 export default function Repairing() {
 
     const userID = useUserStore(state => state.user?.user_id) || '';
+    const setCases = useCaseStore(state => state.setCases);
+    const setLastCase = useCaseStore(state => state.setLastCase);
 
     const form = useForm({
         initialValues: {
@@ -76,6 +79,11 @@ export default function Repairing() {
 
             if (res.status === 200) {
                 clearForm();
+                const pevCases = useCaseStore.getState().cases;
+                if (pevCases) setCases([...pevCases, res.data])
+                else setCases([res.data])
+                console.log(res.data)
+                setLastCase(res.data)
                 notifications.update({
                     id: 'submitNotification',
                     title: 'รายงานสำเร็จ',

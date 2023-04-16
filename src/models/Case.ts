@@ -15,6 +15,21 @@ enum StatusName {
     UNKNOWN = 'เกิดข้อผิดพลาด',
 }
 
+const getStatusName = (status: StatusID): StatusName => {
+    switch (status) {
+        case StatusID.PENDING:
+            return StatusName.PENDING;
+        case StatusID.IN_PROGRESS:
+            return StatusName.IN_PROGRESS;
+        case StatusID.REPAIRING:
+            return StatusName.REPAIRING;
+        case StatusID.REPAIRED:
+            return StatusName.REPAIRED;
+        default :
+            return StatusName.UNKNOWN;
+    }
+}
+
 interface Status {
     status_id: StatusID;
     status_name: StatusName;
@@ -29,6 +44,21 @@ const getStatusColor = (status: string): string => {
         case StatusName.REPAIRING:
             return 'indigo';
         case StatusName.REPAIRED:
+            return 'green';
+        default :
+            return 'gray';
+    }
+}
+
+const getStatusColorByID = (status: StatusID): string => {
+    switch (status) {
+        case StatusID.PENDING:
+            return 'yellow';
+        case StatusID.IN_PROGRESS:
+            return 'blue';
+        case StatusID.REPAIRING:
+            return 'indigo';
+        case StatusID.REPAIRED:
             return 'green';
         default :
             return 'gray';
@@ -54,9 +84,9 @@ interface Case {
 
 interface LastCase {
     case_id: number;
-    statuses: Status;
+    status_id: StatusID;
 }
 
-export {StatusID, StatusName, getStatusColor};
+export {StatusID, StatusName, getStatusColor, getStatusName, getStatusColorByID};
 export type {LastCase};
 export default Case;

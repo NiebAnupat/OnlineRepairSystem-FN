@@ -6,20 +6,26 @@ import {useUserStore} from "@/lib/userStore";
 interface CaseStore {
     cases: Case[] | null;
     lastCase: LastCase | null;
+    filterCases: Case[] | null;
     setCases: (cases: Case[]) => void;
     setLastCase: (lastCase: LastCase) => void;
+    setFilterCases: (filterCases: Case[]) => void;
 }
 
 
 export const useCaseStore = create<CaseStore>((set) => ({
     cases: [],
     lastCase: null,
+    filterCases: [],
     setCases: (newCases: Case[]) => {
         set({cases: newCases});
     },
     setLastCase: (newLastCase: LastCase) => {
         set({lastCase: newLastCase});
     },
+    setFilterCases: (newFilterCases: Case[]) => {
+        set({filterCases: newFilterCases});
+    }
 }));
 
 const fetchCases = async (): Promise<Case[] | null> => {
@@ -33,7 +39,6 @@ const fetchCases = async (): Promise<Case[] | null> => {
         const cases = await res.json();
         return Promise.resolve(cases);
     } catch (e) {
-        console.log(e);
         return Promise.resolve(null);
     }
 };
@@ -41,5 +46,5 @@ const fetchCases = async (): Promise<Case[] | null> => {
 export const initialCases = async () => {
     const cases = await fetchCases();
     const lastCase = cases?.[cases.length - 1];
-    useCaseStore.setState({cases, lastCase});
+    useCaseStore.setState({cases, filterCases: cases, lastCase});
 }

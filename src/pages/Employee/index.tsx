@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Box, Container, Divider, Flex, Text, Title,} from "@mantine/core";
-import {useCaseStore} from "@/lib/caseStore";
+import {initialCases, useCaseStore} from "@/lib/caseStore";
 import {useUserStore} from "@/lib/userStore";
 import User from "@/models/User";
 import Case, {LastCase, StatusID} from "@/models/Case";
@@ -24,6 +24,7 @@ export default function Index() {
     }));
     useEffect(() => {
         const interval = setInterval(() => {
+            initialCases();
             setCurrentTime(new Date().toLocaleTimeString('th-TH', {
                 hour: 'numeric',
                 minute: 'numeric',
