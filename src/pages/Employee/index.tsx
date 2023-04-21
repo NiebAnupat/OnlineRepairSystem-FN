@@ -7,10 +7,12 @@ import Case, {LastCase, StatusID} from "@/models/Case";
 import LastCaseCard from "@/components/Employee/index/LastCaseCard";
 import PendingCard from "@/components/Employee/index/PendingCard";
 import SimpleCaseTable from "@/components/Employee/index/SimpleCaseTable";
+import {useInterval} from "@mantine/hooks";
 
 export default function Index() {
 
     const user: User | null = useUserStore((state) => state.user);
+    const caseLoaded = useCaseStore((state) => state.isLoaded);
     const cases: Case[] | null = useCaseStore((state) => state.cases);
     const lastCase: LastCase | null = useCaseStore((state) => state.lastCase);
     // const lastCase = null;
@@ -22,15 +24,28 @@ export default function Index() {
         hour: 'numeric',
         minute: 'numeric',
     }));
+
+    const refreshCaseInterval = useInterval(() => {
+        initialCases();
+    }, 1000 * 60 * 10);
+    const setCurrentTimeInterval = useInterval(() => {
+        setCurrentTime(new Date().toLocaleTimeString('th-TH', {
+            hour: 'numeric',
+            minute: 'numeric',
+        }));
+    }, 1000 * 60);
+
     useEffect(() => {
-        const interval = setInterval(() => {
-            initialCases();
-            setCurrentTime(new Date().toLocaleTimeString('th-TH', {
-                hour: 'numeric',
-                minute: 'numeric',
-            }));
-        }, 60000);
-        return () => clearInterval(interval);
+        setCurrentTime(new Date().toLocaleTimeString('th-TH', {
+            hour: 'numeric',
+            minute: 'numeric',
+        }));
+        refreshCaseInterval.start();
+        setCurrentTimeInterval.start();
+        return () => {
+            refreshCaseInterval.stop();
+            setCurrentTimeInterval.stop();
+        }
 
 
     }, []);
@@ -53,17 +68,14 @@ export default function Index() {
                         </Text>
                     </Flex>
                     <Flex gap={'xl'} mt={'xl'}>
-                        <LastCaseCard lastCase={lastCase}/>
-                        <PendingCard count={caseCount}/>
+                        <LastCaseCard lastCase={lastCase} caseLoaded={caseLoaded}/>
+                        <PendingCard count={caseCount} caseLoaded={caseLoaded}/>
                     </Flex>
                     <Divider my={'1.5rem'}/>
                     <Title order={3}>รายละเอียด</Title>
-                    <SimpleCaseTable cases={showCase?.reverse()}/>
+                    <SimpleCaseTable cases={showCase?.reverse()} caseLoaded={caseLoaded}/>
                 </Container>
             </Box>
         </>
     );
 }
-
-
-

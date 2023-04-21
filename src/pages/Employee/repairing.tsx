@@ -129,10 +129,10 @@ export default function Repairing() {
     }
 
     return <>
-        <Box bg={"gray.1"} h={"100%"} pt={'xl'} sx={{userSelect: 'none'}}>
+        <Box bg={"gray.1"} h={"100%"} pt={'lg'} sx={{userSelect: 'none'}}>
             <Container size={"90%"} sx={{minHeight: '600px', minWidth: "800px"}}>
                 <Title order={2}>ทำรายการแจ้งซ่อม</Title>
-                <Paper bg={'white'} mt={'xl'} p={'xl'} radius={'md'} withBorder shadow={'sm'}>
+                <Paper bg={'white'} mt={'md'} p={'xl'} radius={'md'} withBorder shadow={'sm'}>
                     <Title order={5}>แบบฟอร์มแจ้งซ่อมอุปกรณ์</Title>
                     <Container size={'md'} my={'md'}>
                         <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>

@@ -7,9 +7,11 @@ interface CaseStore {
     cases: Case[] | null;
     lastCase: LastCase | null;
     filterCases: Case[] | null;
+    isLoaded: boolean;
     setCases: (cases: Case[]) => void;
     setLastCase: (lastCase: LastCase) => void;
     setFilterCases: (filterCases: Case[]) => void;
+    setLoaded: (isLoaded: boolean) => void;
 }
 
 
@@ -17,6 +19,7 @@ export const useCaseStore = create<CaseStore>((set) => ({
     cases: [],
     lastCase: null,
     filterCases: [],
+    isLoaded: false,
     setCases: (newCases: Case[]) => {
         set({cases: newCases});
     },
@@ -25,6 +28,9 @@ export const useCaseStore = create<CaseStore>((set) => ({
     },
     setFilterCases: (newFilterCases: Case[]) => {
         set({filterCases: newFilterCases});
+    },
+    setLoaded : (isLoaded: boolean) => {
+        set({isLoaded});
     }
 }));
 
@@ -44,7 +50,9 @@ const fetchCases = async (): Promise<Case[] | null> => {
 };
 
 export const initialCases = async () => {
+    useCaseStore.setState({isLoaded: false});
     const cases = await fetchCases();
     const lastCase = cases?.[cases.length - 1];
     useCaseStore.setState({cases, filterCases: cases, lastCase});
+    useCaseStore.setState({isLoaded: true});
 }

@@ -80,6 +80,14 @@ interface Case {
     date_close: Date | null;
     images: Image[];
     statuses: Status;
+    users_cases_tec_idTousers: {
+        user_id: string;
+        username: string;
+    } | null;
+    users_cases_user_idTousers: {
+        user_id: string;
+        username: string;
+    };
 }
 
 interface LastCase {

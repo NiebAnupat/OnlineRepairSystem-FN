@@ -19,7 +19,6 @@ import {Carousel} from '@mantine/carousel';
 import {useInterval} from "@mantine/hooks";
 import {BufferToBase64} from "@/lib/helper";
 import {IconCircleCheckFilled, IconClockPause, IconLoader3, IconTools} from "@tabler/icons-react";
-import {useUserStore} from "@/lib/userStore";
 
 interface OwnProps {
     case: Case,
@@ -41,8 +40,8 @@ const HistoryCard: FunctionComponent<Props> = (props) => {
         date_sent,
         date_close,
         tec_id,
+        users_cases_tec_idTousers
     } = props.case;
-    const user_name = useUserStore(state => state.user?.username);
     const [thumbnail, setThumbnail] = useState<Buffer>();
 
     const shuffleImage = useInterval(() => {
@@ -85,13 +84,13 @@ const HistoryCard: FunctionComponent<Props> = (props) => {
         modals.open({
             title: `รายละเอียดของ ${name_case}`,
             size: '90%',
-            padding: 'xl',
+            padding: 'lg',
             radius: 'lg',
             shadow: 'md',
             children: (
-                <Box>
+                <Box >
                     <Flex gap={'xl'}>
-                        <Timeline active={activeStatus} w={1000} color="violet" bulletSize={30} lineWidth={4}>
+                        <Timeline active={activeStatus} color="violet" bulletSize={30} lineWidth={4}  sx={{flexGrow: 1}}>
                             <Timeline.Item title={StatusName.PENDING} bullet={<IconClockPause size={20}/>}>
                                 <Text color="dimmed" size="sm">
                                     รายการแจ้งซ่อมนี้ได้ถูกส่งเข้าระบบแล้ว
@@ -130,7 +129,7 @@ const HistoryCard: FunctionComponent<Props> = (props) => {
                             </Timeline.Item>
                         </Timeline>
 
-                        <Box ml={'xl'} sx={{flexGrow: 1}}>
+                        <Box ml={'xl'} w={'70%'}>
                             <Grid gutter={'xl'} w={'100%'} h={'100%'}>
                                 <Grid.Col span={6}>
                                     <Text size="md" weight={600}>
@@ -153,7 +152,7 @@ const HistoryCard: FunctionComponent<Props> = (props) => {
                                         ชื่อผู้แจ้ง
                                     </Text>
                                     <Text size='sm' ml={'md'} color="dimmed">
-                                        {user_name}
+                                        {props.case.users_cases_user_idTousers.username}
                                     </Text>
                                 </Grid.Col>
                                 <Grid.Col span={6}>
@@ -161,8 +160,7 @@ const HistoryCard: FunctionComponent<Props> = (props) => {
                                         ช่างซ่อม
                                     </Text>
                                     <Text size='sm' ml={'md'} color="dimmed">
-                                        {/* TODO : show technician name*/}
-                                        {tec_id ? tec_id : 'รอการตรวจสอบ'}
+                                        {tec_id ? users_cases_tec_idTousers?.username : 'รอการตรวจสอบ'}
                                     </Text>
                                 </Grid.Col>
                                 <Grid.Col span={12}>

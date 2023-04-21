@@ -37,6 +37,7 @@ export default function App({Component, pageProps}: AppProps) {
                 primaryColor: "indigo",
             }}
         >
+            <MyGlobalStyles/>
             <RouterTransition/>
             <Notifications limit={5}/>
 

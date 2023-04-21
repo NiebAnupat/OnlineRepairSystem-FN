@@ -32,7 +32,7 @@ export default function History() {
     const search = () => {
         const filtered: Case[] | undefined = cases?.filter((c) => {
             const formattedDate = moment(c.date_case).format('YYYY-MM-DD');
-            return c.case_id == Number(searchQuery) || c.name_case.includes(searchQuery) || c.status_id.toString().includes(searchQuery) || c.place_case.includes(searchQuery) || formattedDate.includes(searchQuery)
+            return c.case_id == Number(searchQuery) || c.name_case.includes(searchQuery)|| c.detail_case.includes(searchQuery) || c.status_id.toString().includes(searchQuery) || c.place_case.includes(searchQuery) || formattedDate.includes(searchQuery)
         })
         if (filtered?.length === 0) {
             return setFilterCases([])
@@ -53,17 +53,19 @@ export default function History() {
             <Container size={"90%"} pb={'xl'}>
                 <Title order={2}>ประวัติการแจ้งซ่อม</Title>
                 <Space h={'xl'}/>
-                <TextInput placeholder={'ค้นหา...'} radius={'lg'} icon={<IconSearch/>}
-                           description={'สามารถค้นหาด้วย ชื่อ รหัส สถานะ สถานที่ วันที่ ฯลฯ'}
-                           onChange={(e) => setSearchQuery(e.currentTarget.value)}
-                />
+                <Container>
+                    <TextInput placeholder={'ค้นหา...'} radius={'lg'} icon={<IconSearch/>}
+                               description={'สามารถค้นหาด้วย ชื่อ รหัส สถานะ สถานที่ วันที่ ฯลฯ'}
+                               onChange={(e) => setSearchQuery(e.currentTarget.value)}
+                    />
+                </Container>
                 <Divider my={'xl'}/>
                 <Space h={'md'}/>
 
 
                 {filterCases && filterCases?.length > 0 ?
                     <Box>
-                        <Text c={'dimmed'} fz={'xs'} mt={'-xl'} mb={'md'}>เลือกเพื่อดูรายละเอียด</Text>
+                        <Text c={'dimmed'} fz={'xs'} mt={'-xl'} mb={'xs'}>เลือกเพื่อดูรายละเอียด</Text>
                         <SimpleGrid cols={3} spacing={'xl'}>
                             {filterCases
                                 ?.slice()
