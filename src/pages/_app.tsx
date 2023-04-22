@@ -8,7 +8,7 @@ import {DevSupport} from "@react-buddy/ide-toolbox-next";
 import {ComponentPreviews, useInitial} from "@/components/dev";
 import {RouterTransition} from "@/components/Layout/RouterTransition";
 
-function MyGlobalStyles() {
+function MyFontStyles() {
     return (
         <Global
             styles={[
@@ -19,6 +19,30 @@ function MyGlobalStyles() {
                         fontStyle: "normal",
                         fontWeight: "normal",
                         fontDisplay: "swap",
+                    },
+
+                },
+            ]}
+        />
+    );
+}
+
+function MyGlobalStyles() {
+    return (
+        <Global
+            styles={[
+                {
+                    "*": {
+                        boxSizing: "border-box",
+                    },
+                    body: {
+                        margin: 0,
+                        padding: 0,
+                        fontFamily: "Noto Sans Thai",
+                        userSelect: "none",
+                    },
+                    "html, body, #__next": {
+                        height: "100%",
                     },
                 },
             ]}
@@ -37,6 +61,7 @@ export default function App({Component, pageProps}: AppProps) {
                 primaryColor: "indigo",
             }}
         >
+            <MyFontStyles/>
             <MyGlobalStyles/>
             <RouterTransition/>
             <Notifications limit={5}/>
@@ -46,7 +71,7 @@ export default function App({Component, pageProps}: AppProps) {
                     <DevSupport ComponentPreviews={ComponentPreviews}
                                 useInitialHook={useInitial}
                     >
-                        <Component {...pageProps} />
+                        <Component {...pageProps}/>
                     </DevSupport>
                 </Layout>
             </ModalsProvider>

@@ -31,8 +31,6 @@ const initialUser = async (): Promise<User | null> => {
 
         return Promise.resolve(userWithAvatar);
     } catch (e: any) {
-        console.log(e);
-
         return Promise.resolve(null);
     }
 };
@@ -57,3 +55,5 @@ initialUser().then((user) => {
     useUserStore.setState({user});
     initialCases()
 });
+
+export {initialUser}
