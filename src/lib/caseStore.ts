@@ -41,7 +41,15 @@ const fetchCases = async (): Promise<Case[] | null> => {
         if (!user_id) {
             return null;
         }
-        const res = await fetch(withQuery(`${baseURL}cases/by`, {user: user_id}));
+        const user_role = await useUserStore.getState().user?.user_role;
+        let res : Response;
+        switch (user_role) {
+            case "user":  res = await fetch(withQuery(`${baseURL}cases/by`, {user: user_id})); break;
+            case 'worker': res = await fetch(withQuery(`${baseURL}cases/by`, {tec: user_id})); break;
+            case 'admin': res = await fetch(`${baseURL}cases`); break;
+            default: res = await fetch(`${baseURL}cases`);
+        }
+
         const cases = await res.json();
         return Promise.resolve(cases);
     } catch (e) {

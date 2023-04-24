@@ -149,13 +149,12 @@ export default function Repairing() {
                                             flexGrow: 1,
                                             justifyContent: 'center',
                                             alignItems: 'center',
-                                            position: 'relative', // Add this line to make the child div position relative
+                                            position: 'relative',
                                             border: form.errors.images ? '1px solid red' : undefined,
                                         }}
                                         onDrop={(files) => {
                                             form.setFieldValue('images', files);
                                         }}
-                                        className="dropzone"
                                         style={{
                                             backgroundImage: droppedImage ? `url(${URL.createObjectURL(droppedImage)})` : undefined,
                                             backgroundSize: 'cover',

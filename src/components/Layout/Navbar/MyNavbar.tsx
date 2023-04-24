@@ -11,9 +11,11 @@ import {bufferToUrl} from "@/lib/helper";
 interface NavLinkData {
     icon: React.ReactNode;
     label: string;
+    href?: string;
     color: string;
     colorLevel: number;
-    href: string;
+    links?: { label: string; link: string }[];
+    initiallyOpened?: boolean;
 }
 
 export default function MyNavbar() {
@@ -50,9 +52,47 @@ export default function MyNavbar() {
             label: "ข้อมูลส่วนตัว",
             color: "orange",
             colorLevel: 5,
-            href: "/Employee/profile",
+            href: "/Employee/Profile",
         },
     ];
+    const navLinkData_Worker: NavLinkData[] = [
+        {
+            icon: <IconHome/>,
+            label: "หน้าหลัก",
+            color: "blue",
+            colorLevel: 6,
+            href: "/Worker",
+        },
+        {
+            icon: <IconTableOptions/>,
+            label: "งานแจ้งซ่อม",
+            color: "green",
+            colorLevel: 6,
+            links : [
+                {label: 'ตรวจสอบการแจ้ง', link: '/Worker/Tasks/Check'},
+                {label: 'งานที่รับแล้ว', link: '/Worker/Tasks/Repairing'},
+                {label: 'งานที่เสร็จแล้ว', link: '/Worker/Tasks/Completed'},
+            ]
+        },
+        {
+            icon: <IconUser/>,
+            label: "ข้อมูลส่วนตัว",
+            color: "orange",
+            colorLevel: 5,
+            href: "/Worker/Profile",
+        }
+    ];
+
+    const getNavLinkData = () => {
+        switch (displayRole) {
+            case "employee":
+                return navLinkData_Employee;
+            case "worker":
+                return navLinkData_Worker;
+            default:
+                return [];
+        }
+    }
 
     const handleSignOut = () => {
         useUserStore.getState().signOut();
@@ -99,7 +139,7 @@ export default function MyNavbar() {
             </Navbar.Section>
             <Divider mt={"md"} mb={"sm"}/>
             <Navbar.Section grow>
-                {navLinkData_Employee.map((data) => (
+                {getNavLinkData().map((data) => (
                     <NavLink
                         key={data.label}
                         icon={data.icon}
@@ -107,8 +147,10 @@ export default function MyNavbar() {
                         color={data.color}
                         colorLevel={data.colorLevel}
                         href={data.href}
+                        links={data.links}
                     />
                 ))}
+                {/*<NavbarLinksGroup displayRole={displayRole}/>*/}
             </Navbar.Section>
             <Navbar.Section>
                 <UnstyledButton

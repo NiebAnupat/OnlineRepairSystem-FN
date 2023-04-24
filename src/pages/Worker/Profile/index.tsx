@@ -21,7 +21,7 @@ import {notifications} from "@mantine/notifications";
 import {AxiosError} from "axios";
 import {useRouter} from "next/router";
 
-export default function Profile() {
+export default function Index() {
     const user: User | null = useUserStore(state => state.user)
     const username = useUserStore(state => state.user?.username)
     const setUser = useUserStore(state => state.setUser)
@@ -177,9 +177,15 @@ export default function Profile() {
                                                 gradient={{from: 'indigo', to: 'cyan'}}>บันทึก</Button>
                                     </Center>
                                 </form>
-                                <Text c={'dimmed'} fz={'xs'} align={'end'} mt={'xl'}
-                                      sx={{cursor: 'pointer'}} onClick={() => router.push('/Employee/ChangePassword')}
-                                >เปลี่ยนรหัสผ่าน</Text>
+                                <Flex justify={'space-between'}>
+                                    <Text c={'dimmed'} fz={'xs'} mt={'xl'}>
+                                        แก้ไขล่าสุดเมื่อ {user!.changeAt && new Date(user!.changeAt).toLocaleDateString('th-TH')}
+                                    </Text>
+                                    <Text c={'dimmed'} fz={'xs'} mt={'xl'}
+                                          sx={{cursor: 'pointer'}}
+                                          onClick={() => router.push('/Worker/Profile/ChangePassword')}
+                                    >เปลี่ยนรหัสผ่าน</Text>
+                                </Flex>
                             </Container>
                         </Box>
                     </Flex>

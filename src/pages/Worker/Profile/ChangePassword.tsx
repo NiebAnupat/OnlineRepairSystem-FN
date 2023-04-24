@@ -60,7 +60,7 @@ const ChangePassword = () => {
                     })
 
                     form.reset();
-                    await router.push('/employee/profile')
+                    await router.push('/Worker/Profile')
                 }
             }
 
@@ -104,7 +104,7 @@ const ChangePassword = () => {
                                 <PasswordInput label={'ยืนยันรหัสผ่านใหม่'} {...form.getInputProps('confirmPassword')}/>
                                 <Center mt={'xl'}>
                                     <Button variant={'outline'} color={'red'} radius={'md'}
-                                            onClick={form.reset}>ยกเลิก</Button>
+                                            onClick={useRouter().back}>ยกเลิก</Button>
                                     <Button ml={'md'} radius={'md'} variant={'gradient'} type={'submit'}
                                             gradient={{from: 'indigo', to: 'cyan'}}>บันทึก</Button>
                                 </Center>
