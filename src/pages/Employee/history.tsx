@@ -55,7 +55,7 @@ export default function History() {
                 <Space h={'xl'}/>
                 <Container>
                     <TextInput placeholder={'ค้นหา...'} radius={'lg'} icon={<IconSearch/>}
-                               description={'สามารถค้นหาด้วย ชื่อ รหัส สถานะ สถานที่ วันที่ ฯลฯ'}
+                               description={'สามารถค้นหาด้วย ชื่อ รหัส สถานะ สถานที่ ฯลฯ'}
                                onChange={(e) => setSearchQuery(e.currentTarget.value)}
                     />
                 </Container>

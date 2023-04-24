@@ -7,10 +7,12 @@ interface CaseStore {
     cases: Case[] | null;
     lastCase: LastCase | null;
     filterCases: Case[] | null;
+    pendingCases: Case[] | null;
     isLoaded: boolean;
     setCases: (cases: Case[]) => void;
     setLastCase: (lastCase: LastCase) => void;
     setFilterCases: (filterCases: Case[]) => void;
+    setPendingCases: (pendingCases: Case[]) => void;
     setLoaded: (isLoaded: boolean) => void;
 }
 
@@ -19,6 +21,7 @@ export const useCaseStore = create<CaseStore>((set) => ({
     cases: [],
     lastCase: null,
     filterCases: [],
+    pendingCases: [],
     isLoaded: false,
     setCases: (newCases: Case[]) => {
         set({cases: newCases});
@@ -29,26 +32,37 @@ export const useCaseStore = create<CaseStore>((set) => ({
     setFilterCases: (newFilterCases: Case[]) => {
         set({filterCases: newFilterCases});
     },
-    setLoaded : (isLoaded: boolean) => {
+    setPendingCases: (newPendingCases: Case[]) => {
+        set({pendingCases: newPendingCases});
+    },
+    setLoaded: (isLoaded: boolean) => {
         set({isLoaded});
     }
 }));
 
+const baseURL = "http://localhost:4000/";
 const fetchCases = async (): Promise<Case[] | null> => {
-    const baseURL = "http://localhost:4000/";
     try {
         const user_id = await useUserStore.getState().user?.user_id;
         if (!user_id) {
             return null;
         }
         const user_role = await useUserStore.getState().user?.user_role;
-        let res : Response;
+        let res: Response;
         switch (user_role) {
-            case "user":  res = await fetch(withQuery(`${baseURL}cases/by`, {user: user_id})); break;
-            case 'worker': res = await fetch(withQuery(`${baseURL}cases/by`, {tec: user_id})); break;
-            case 'admin': res = await fetch(`${baseURL}cases`); break;
-            default: res = await fetch(`${baseURL}cases`);
+            case "employee":
+                res = await fetch(withQuery(`${baseURL}cases/by`, {user: user_id,getImages: true}));
+                break;
+            case 'worker':
+                res = await fetch(withQuery(`${baseURL}cases/by`, {tec: user_id}));
+                break;
+            case 'admin':
+                res = await fetch(`${baseURL}cases`);
+                break;
+            default:
+                res = await fetch(`${baseURL}cases`);
         }
+
 
         const cases = await res.json();
         return Promise.resolve(cases);
@@ -60,7 +74,18 @@ const fetchCases = async (): Promise<Case[] | null> => {
 export const initialCases = async () => {
     useCaseStore.setState({isLoaded: false});
     const cases = await fetchCases();
-    const lastCase = cases?.[cases.length - 1];
-    useCaseStore.setState({cases, filterCases: cases, lastCase});
+    const user_role = await useUserStore.getState().user?.user_role;
+    switch (user_role) {
+        case "employee": {
+            const lastCase = cases?.[cases.length - 1];
+            useCaseStore.setState({cases, filterCases: cases, lastCase});
+            break;
+        }
+        case 'worker': {
+            const pendingCases = await fetch(withQuery(`${baseURL}cases/by`, { status: '1'})).then(res => res.json());
+            useCaseStore.setState({cases,filterCases:pendingCases, pendingCases});
+            break;
+        }
+    }
     useCaseStore.setState({isLoaded: true});
 }

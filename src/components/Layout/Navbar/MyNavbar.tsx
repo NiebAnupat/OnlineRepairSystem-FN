@@ -52,7 +52,7 @@ export default function MyNavbar() {
             label: "ข้อมูลส่วนตัว",
             color: "orange",
             colorLevel: 5,
-            href: "/Employee/Profile",
+            href: "/User",
         },
     ];
     const navLinkData_Worker: NavLinkData[] = [
@@ -69,9 +69,9 @@ export default function MyNavbar() {
             color: "green",
             colorLevel: 6,
             links : [
-                {label: 'ตรวจสอบการแจ้ง', link: '/Worker/Tasks/Check'},
-                {label: 'งานที่รับแล้ว', link: '/Worker/Tasks/Repairing'},
-                {label: 'งานที่เสร็จแล้ว', link: '/Worker/Tasks/Completed'},
+                {label: 'รายการใหม่', link: '/Worker/Tasks/Check'},
+                {label: 'รายการของฉัน', link: '/Worker/Tasks/Repairing'},
+                {label: 'ประวัติ', link: '/Worker/Tasks/History'},
             ]
         },
         {
@@ -79,7 +79,7 @@ export default function MyNavbar() {
             label: "ข้อมูลส่วนตัว",
             color: "orange",
             colorLevel: 5,
-            href: "/Worker/Profile",
+            href: "/User",
         }
     ];
 

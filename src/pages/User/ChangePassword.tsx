@@ -60,7 +60,7 @@ const ChangePassword = () => {
                     })
 
                     form.reset();
-                    await router.push('/Worker/Profile')
+                    await router.back();
                 }
             }
 

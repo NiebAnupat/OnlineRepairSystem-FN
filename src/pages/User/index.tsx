@@ -12,7 +12,7 @@ import {
     Title
 } from "@mantine/core";
 import React, {useEffect, useState} from "react";
-import {initialUser, useUserStore} from "@/lib/userStore";
+import { initUser, useUserStore} from "@/lib/userStore";
 import User from "@/models/User";
 import {BufferToBase64} from "@/lib/helper";
 import {useForm} from "@mantine/form";
@@ -24,7 +24,6 @@ import {useRouter} from "next/router";
 export default function Index() {
     const user: User | null = useUserStore(state => state.user)
     const username = useUserStore(state => state.user?.username)
-    const setUser = useUserStore(state => state.setUser)
     const [avatar, setAvatar] = useState<Buffer>(user?.avatar as Buffer);
     const [file, setFile] = useState<File | null>(null);
     const router = useRouter();
@@ -78,8 +77,7 @@ export default function Index() {
                     color: 'green',
                 })
 
-                const user = await initialUser() as User;
-                setUser(user);
+                initUser();
                 form.setFieldValue('password', '');
                 form.setFieldValue('confirmPassword', '');
 
@@ -106,6 +104,10 @@ export default function Index() {
 
     }
 
+    useEffect(() => {
+       initUser();
+    },[])
+
 
     useEffect(() => {
         if (file) {
@@ -127,7 +129,7 @@ export default function Index() {
                             message: 'อัพโหลดรูปภาพสำเร็จ',
                             color: 'green',
                         })
-                        initialUser().then((user) => user && setUser(user))
+                        initUser();
                     }
                 } catch (e) {
                     notifications.show({
@@ -183,7 +185,7 @@ export default function Index() {
                                     </Text>
                                     <Text c={'dimmed'} fz={'xs'} mt={'xl'}
                                           sx={{cursor: 'pointer'}}
-                                          onClick={() => router.push('/Worker/Profile/ChangePassword')}
+                                          onClick={() => router.push('/User/ChangePassword')}
                                     >เปลี่ยนรหัสผ่าน</Text>
                                 </Flex>
                             </Container>

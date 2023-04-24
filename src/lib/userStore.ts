@@ -56,4 +56,9 @@ initialUser().then((user) => {
     initialCases()
 });
 
-export {initialUser}
+const initUser = async () => {
+    const user = await initialUser();
+    useUserStore.setState({user});
+}
+
+export {initialUser, initUser}

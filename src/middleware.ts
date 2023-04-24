@@ -15,21 +15,21 @@ export async function middleware(request: NextRequest) {
                     case "employee":
                         if (request.nextUrl.pathname === "/") {
                             return NextResponse.redirect(new URL("/Employee", request.url));
-                        } else if (pathArr[1] !== "Employee") {
+                        } else if (pathArr[1] !== "Employee" && pathArr[1] !== 'User') {
                             return NextResponse.redirect(new URL("/", request.url));
                         }
                         break;
                     case "worker":
                         if (request.nextUrl.pathname === "/") {
                             return NextResponse.redirect(new URL("/Worker", request.url));
-                        } else if (pathArr[1] !== "Worker") {
+                        } else if (pathArr[1] !== "Worker" && pathArr[1] !== 'User') {
                             return NextResponse.redirect(new URL("/", request.url));
                         }
                         break;
                     case "admin":
                         if (request.nextUrl.pathname === "/") {
                             return NextResponse.redirect(new URL("/Admin", request.url));
-                        } else if (pathArr[1] !== "Admin") {
+                        } else if (pathArr[1] !== "Admin" && pathArr[1] !== 'User') {
                             return NextResponse.redirect(new URL("/", request.url));
                         }
                         break;

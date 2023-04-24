@@ -15,7 +15,6 @@ import {useForm} from '@mantine/form';
 import {IconKey, IconLogin, IconUser} from "@tabler/icons-react";
 import illustration from "@/assets/IllustrationProjectManager/SVG/Illustration2.svg";
 import loginBG from "@/assets/img/login-bg.png";
-import {useUserStore} from "@/lib/userStore";
 import {UserSignInResponse} from "@/models/User";
 import useAxios from "@/lib/useAxios";
 import axios from "axios";
@@ -23,7 +22,6 @@ import axios from "axios";
 
 export default function Index() {
     const router = useRouter();
-    const {setUser} = useUserStore();
 
 
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -202,7 +200,6 @@ export default function Index() {
                             <Text
                                 fz={"1.5rem"}
                                 fw={600}
-                                // c={"white"}
                                 mt={"40%"}
                             >
                                 ระบบแจ้งซ่อมออนไลน์
