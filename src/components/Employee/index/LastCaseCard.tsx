@@ -8,7 +8,7 @@ import {
     Tooltip,
     UnstyledButton
 } from "@mantine/core";
-import showDetail from "@/lib/detailModal";
+import showDetail from "@/components/Modal/detailModal";
 
 interface OwnProps {
     caseLoaded: boolean

@@ -1,6 +1,6 @@
 import {ActionIcon, Center, Flex, Pagination, Paper, Skeleton, Table, Text, Tooltip} from "@mantine/core";
 import StatusBadge from "@/components/helper/StatusBadge";
-import showDetail from "@/lib/detailModal";
+import showDetail from "@/components/Modal/detailModal";
 import {IconArrowAutofitDown, IconSearch} from "@tabler/icons-react";
 import React, {useEffect, useState} from "react";
 import Case, {StatusID} from "@/models/Case";

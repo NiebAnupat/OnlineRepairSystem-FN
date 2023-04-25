@@ -11,7 +11,7 @@ import {
 import {usePagination} from '@mantine/hooks';
 import Case from "@/models/Case";
 import { IconSearch} from "@tabler/icons-react";
-import showDetail from "@/lib/detailModal";
+import showDetail from "@/components/Modal/detailModal";
 import StatusBadge from "@/components/helper/StatusBadge";
 
 interface OwnProps {

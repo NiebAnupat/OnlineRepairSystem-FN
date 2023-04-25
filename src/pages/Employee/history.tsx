@@ -32,7 +32,7 @@ export default function History() {
     const search = () => {
         const filtered: Case[] | undefined = cases?.filter((c) => {
             const formattedDate = moment(c.date_case).format('YYYY-MM-DD');
-            return c.case_id == Number(searchQuery) || c.name_case.includes(searchQuery)|| c.detail_case.includes(searchQuery) || c.status_id.toString().includes(searchQuery) || c.place_case.includes(searchQuery) || formattedDate.includes(searchQuery)
+            return c.case_id == Number(searchQuery) || c.name_case.includes(searchQuery) || c.detail_case.includes(searchQuery) || c.status_id.toString().includes(searchQuery) || c.statuses.status_name.includes(searchQuery) || c.place_case.includes(searchQuery) || formattedDate.includes(searchQuery)
         })
         if (filtered?.length === 0) {
             return setFilterCases([])

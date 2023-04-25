@@ -1,11 +1,11 @@
 import {
     ActionIcon,
-    Box, Center,
+    Box,
+    Center,
     Container,
     Divider,
     Flex, Pagination,
-    Paper,
-    Skeleton,
+    Paper, Skeleton,
     Space,
     Table,
     TextInput,
@@ -13,23 +13,19 @@ import {
     Tooltip
 } from "@mantine/core";
 import React, {useEffect, useState} from "react";
-import { useCaseStore} from "@/lib/caseStore";
+import {useCaseStore} from "@/lib/caseStore";
 import {useDebouncedState, usePagination} from "@mantine/hooks";
 import Case from "@/models/Case";
 import moment from "moment/moment";
-import { IconEditCircle, IconSearch} from "@tabler/icons-react";
-import showDetail from "@/components/Modal/detailModal";
-import {modals} from "@mantine/modals";
-import UpdateCaseStatus from "@/components/Modal/UpdateCaseStatus";
+import {IconEditCircle, IconSearch} from "@tabler/icons-react";
 import StatusBadge from "@/components/helper/StatusBadge";
-import {useUserStore} from "@/lib/userStore";
+import showDetail from "@/components/Modal/detailModal";
+import {useRouter} from "next/router";
 
-export const Repairing = () => {
-
-    const user_id = useUserStore((state) => state.user?.user_id);
-
+export const Index = () => {
+    const router = useRouter();
     const isLoaded = useCaseStore((state) => state.isLoaded);
-    const processCases = useCaseStore((state) => state.processCases);
+    const allCase = useCaseStore((state) => state.cases);
     const filterCases = useCaseStore((state) => state.filterCases);
     const setFilterCases = useCaseStore((state) => state.setFilterCases);
 
@@ -43,7 +39,6 @@ export const Repairing = () => {
     const [searchQuery, setSearchQuery] = useDebouncedState('', 250);
 
     useEffect(() => {
-
         const windowHeight = window.innerHeight;
         if (windowHeight < 700) {
             setItemsPerPage(4)
@@ -61,11 +56,12 @@ export const Repairing = () => {
     }, [])
 
     useEffect(() => {
-        setFilterCases(processCases as Case[])
-    }, [processCases])
+        console.log({allCase})
+        setFilterCases(allCase as Case[])
+    }, [allCase])
 
     const search = () => {
-        const filtered: Case[] | undefined = processCases?.filter((c) => {
+        const filtered: Case[] | undefined = allCase?.filter((c) => {
             const formattedDate = moment(c.date_case).format('YYYY-MM-DD');
             return c.case_id == Number(searchQuery) || c.name_case.includes(searchQuery) || c.detail_case.includes(searchQuery) || c.status_id.toString().includes(searchQuery) || c.statuses.status_name.includes(searchQuery) || c.place_case.includes(searchQuery) || formattedDate.includes(searchQuery)
         })
@@ -77,29 +73,21 @@ export const Repairing = () => {
 
     useEffect(() => {
         if (searchQuery === '' || searchQuery === undefined) {
-            setFilterCases(processCases as Case[])
+            setFilterCases(allCase as Case[])
         } else {
             search()
         }
     }, [searchQuery])
 
-    const updateCaseStatus = (selectedCase: Case) => {
-        modals.open({
-            title: 'เปลี่ยนสถานะรายการ',
-            padding: 'xl',
-            size: 'lg',
-            radius: 'lg',
-            children: (<UpdateCaseStatus selectedCase={selectedCase} user_id={user_id ? user_id : ''}/>)
-        })
-    }
+
 
     return (
         <>
             <Box bg={"gray.1"} h={"100%"} pt={'xl'}>
                 <Container size={"90%"}>
-                    <Title order={2}>งานที่กำลังดำเนินการ</Title>
+                    <Title order={2}>จัดการข้อมูลการแจ้งซ่อม</Title>
                     <Divider my={'md'}/>
-                    <Container>
+                    <Container size={'70%'}>
                         <Container size={'70%'}>
                             <TextInput placeholder={'ค้นหา...'} radius={'lg'} icon={<IconSearch/>}
                                        description={'สามารถค้นหาด้วย ชื่อ รหัส สถานะ สถานที่ ฯลฯ'}
@@ -123,9 +111,9 @@ export const Repairing = () => {
                                     <thead>
                                     <tr>
                                         <th style={{width: '10%', textAlign: 'center'}}>รหัส</th>
-                                        <th style={{textAlign: 'center', width: '40%'}}>หัวข้อ</th>
+                                        <th style={{textAlign: 'center', width: '50%'}}>หัวข้อ</th>
                                         <th style={{textAlign: 'center', width: '15%'}}>วันที่</th>
-                                        <th style={{textAlign: 'center', width: '15%'}}>สถานะ</th>
+                                        <th style={{textAlign: 'center', width: '10%'}}>สถานะ</th>
                                         <th style={{textAlign: 'center'}}>ดำเนินการ</th>
                                     </tr>
                                     </thead>
@@ -154,8 +142,7 @@ export const Repairing = () => {
                                                                     <IconSearch size="1.125rem"/>
                                                                 </ActionIcon>
                                                             </Tooltip>
-                                                            <Tooltip label={'แก้ไขสถานะ'} color={'green.5'}
-                                                                     withArrow
+                                                            <Tooltip label={'แก้ไขข้อมูล'} color={'lime.5'} withArrow
                                                                      position="right"
                                                                      transitionProps={{
                                                                          transition: 'scale-x',
@@ -163,8 +150,8 @@ export const Repairing = () => {
                                                                      }}>
                                                                 <ActionIcon mx={'auto'} variant="subtle" radius={'xl'}
                                                                             size={'lg'}
-                                                                            color={'green.9'}
-                                                                            onClick={() => updateCaseStatus(item)}
+                                                                            color={'green.7'}
+                                                                            onClick={() => router.push(`/Admin/Manage/Repair/Edit?caseID=${item.case_id}`)}
                                                                 >
                                                                     <IconEditCircle size="1.125rem"/>
                                                                 </ActionIcon>
@@ -188,12 +175,12 @@ export const Repairing = () => {
                                 </Center>
                             </Paper>
                         </Skeleton>
-
                     </Container>
+                    <Space h={'md'}/>
                 </Container>
             </Box>
         </>
     );
 };
 
-export default Repairing;
+export default Index;

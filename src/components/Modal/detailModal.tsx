@@ -1,5 +1,5 @@
 import useAxios from "@/lib/useAxios";
-import Case, {StatusName} from "@/models/Case";
+import Case, {StatusID, StatusName} from "@/models/Case";
 import {modals} from "@mantine/modals";
 import {Box, Flex, Grid, Image, Space, Text, Textarea, Timeline} from "@mantine/core";
 import {IconCircleCheckFilled, IconClockPause, IconLoader3, IconTools} from "@tabler/icons-react";
@@ -8,9 +8,9 @@ import {BufferToBase64} from "@/lib/helper";
 import {notifications} from "@mantine/notifications";
 import React from "react";
 
-const showDetail = async (case_id: number,imageHeight:number) => {
+const showDetail = async (case_id: number, imageHeight: number) => {
     try {
-        const res = await useAxios.get(`cases/${case_id}`)
+        const res = await useAxios.get(`cases/${case_id}?getImages=true`)
         if (res.status === 200) {
             const cse: Case = res.data
             modals.open({
@@ -37,8 +37,8 @@ const showDetail = async (case_id: number,imageHeight:number) => {
                                     <Text color="dimmed" size="sm">
                                         เจ้าหน้าที่ได้รับคำขอแจ้งซ่อมแล้ว
                                     </Text>
-                                    {cse.date_assign && (<Text mt={3}
-                                                               size="xs">วันที่ {new Date(cse.date_assign).toLocaleDateString('th-TH')}</Text>)}
+                                    {cse.date_assign && cse.status_id >= StatusID.IN_PROGRESS && (<Text mt={3}
+                                                                                                        size="xs">วันที่ {new Date(cse.date_assign).toLocaleDateString('th-TH')}</Text>)}
                                     <Space h="xl"/>
                                 </Timeline.Item>
 
@@ -47,7 +47,7 @@ const showDetail = async (case_id: number,imageHeight:number) => {
                                     <Text color="dimmed" size="sm">
                                         เจ้าหน้าที่กำลังดำเนินการซ่อม
                                     </Text>
-                                    {cse.date_sent && (
+                                    {cse.date_sent && cse.status_id >= StatusID.REPAIRING && (
                                         <Text mt={3}
                                               size="xs">วันที่ {new Date(cse.date_sent).toLocaleDateString('th-TH')}</Text>)}
                                     <Space h="xl"/>
@@ -58,7 +58,7 @@ const showDetail = async (case_id: number,imageHeight:number) => {
                                     <Text color="dimmed" size="sm">
                                         เจ้าหน้าที่ได้ดำเนินการซ่อมเสร็จสิ้นแล้ว
                                     </Text>
-                                    {cse.date_close && (<Text mt={3}
+                                    {cse.date_close && cse.status_id >= StatusID.REPAIRED && (<Text mt={3}
                                                               size="xs">วันที่ {new Date(cse.date_close).toLocaleDateString('th-TH')}</Text>)}
                                     <Space h="xl"/>
                                 </Timeline.Item>

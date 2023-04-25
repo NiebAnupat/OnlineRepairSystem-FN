@@ -15,7 +15,7 @@ import React, {useEffect, useState} from "react";
 import {useCaseStore} from "@/lib/caseStore";
 import {useDebouncedState, usePagination} from "@mantine/hooks";
 import Case, {StatusID} from "@/models/Case";
-import showDetail from "@/lib/detailModal";
+import showDetail from "@/components/Modal/detailModal";
 import moment from "moment/moment";
 import {useUserStore} from "@/lib/userStore";
 import useAxios from "@/lib/useAxios";
@@ -65,7 +65,7 @@ export const Check = () => {
     const search = () => {
         const filtered: Case[] | undefined = pendingCases?.filter((c) => {
             const formattedDate = moment(c.date_case).format('YYYY-MM-DD');
-            return c.case_id == Number(searchQuery) || c.name_case.includes(searchQuery) || c.detail_case.includes(searchQuery) || c.status_id.toString().includes(searchQuery) || c.place_case.includes(searchQuery) || formattedDate.includes(searchQuery)
+            return c.case_id == Number(searchQuery) || c.name_case.includes(searchQuery) || c.detail_case.includes(searchQuery) || c.status_id.toString().includes(searchQuery) || c.statuses.status_name.includes(searchQuery) || c.place_case.includes(searchQuery) || formattedDate.includes(searchQuery)
         })
         if (filtered?.length === 0) {
             return setFilterCases([])

@@ -1,7 +1,7 @@
 import {useUserStore} from "@/lib/userStore";
 import User from "@/models/User";
 import {Avatar, Box, Divider, Group, Image, Navbar, Text, ThemeIcon, UnstyledButton,} from "@mantine/core";
-import {IconHistory, IconHome, IconLogout, IconTableOptions, IconUser,} from "@tabler/icons-react";
+import {IconHistory, IconHome, IconLogout, IconTableOptions, IconUser, IconUserEdit,} from "@tabler/icons-react";
 import React from "react";
 import NavLink from "./_NavLink";
 import repair from "@/assets/SVG/repair.svg";
@@ -68,10 +68,45 @@ export default function MyNavbar() {
             label: "งานแจ้งซ่อม",
             color: "green",
             colorLevel: 6,
-            links : [
+            links: [
                 {label: 'รายการใหม่', link: '/Worker/Tasks/Check'},
                 {label: 'รายการของฉัน', link: '/Worker/Tasks/Repairing'},
                 {label: 'ประวัติ', link: '/Worker/Tasks/History'},
+            ]
+        },
+        {
+            icon: <IconUser/>,
+            label: "ข้อมูลส่วนตัว",
+            color: "orange",
+            colorLevel: 5,
+            href: "/User",
+        }
+    ];
+
+    const navLinkData_Admin: NavLinkData[] = [
+        {
+            icon: <IconHome/>,
+            label: "หน้าหลัก",
+            color: "blue",
+            colorLevel: 6,
+            href: "/Admin",
+        },
+        {
+            icon: <IconTableOptions/>,
+            label: "จัดการข้อมูลการแจ้งซ่อม",
+            color: "green",
+            colorLevel: 6,
+            href: "/Admin/Manage/Repair",
+        },
+        {
+            icon: <IconUserEdit/>,
+            label: "จัดการข้อมูลผู้ใช้งาน",
+            color: "violet",
+            colorLevel: 6,
+            links: [
+                {label: 'ข้อมูลพนักงาน', link: '/Admin/Manage/Employee'},
+                {label: 'ข้อมูลช่างซ่อม', link: '/Admin/Manage/Worker'},
+                {label: 'ข้อมูลสิทธิ์ผู้ใช้', link: '/Admin/Manage/Role'},
             ]
         },
         {
@@ -89,6 +124,8 @@ export default function MyNavbar() {
                 return navLinkData_Employee;
             case "worker":
                 return navLinkData_Worker;
+            case "admin":
+                return navLinkData_Admin;
             default:
                 return [];
         }

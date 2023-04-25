@@ -57,7 +57,7 @@ const fetchCases = async (): Promise<Case[] | null> => {
         let res: Response;
         switch (user_role) {
             case "employee":
-                res = await fetch(withQuery(`${baseURL}cases/by`, {user: user_id,getImages: true}));
+                res = await fetch(withQuery(`${baseURL}cases/by`, {user: user_id, getImages: true}));
                 break;
             case 'worker':
                 res = await fetch(withQuery(`${baseURL}cases/by`, {tec: user_id}));
@@ -88,9 +88,13 @@ export const initialCases = async () => {
             break;
         }
         case 'worker': {
-            const pendingCases = await fetch(withQuery(`${baseURL}cases/by`, { status: '1'})).then(res => res.json());
+            const pendingCases = await fetch(withQuery(`${baseURL}cases/by`, {status: '1'})).then(res => res.json());
             const processCS = cases?.filter(c => c.status_id !== StatusID.PENDING && c.status_id !== StatusID.REPAIRED);
-            useCaseStore.setState({cases,filterCases:pendingCases, pendingCases, processCases: processCS});
+            useCaseStore.setState({cases, filterCases: pendingCases, pendingCases, processCases: processCS});
+            break;
+        }
+        case 'admin': {
+            useCaseStore.setState({cases, filterCases: cases, pendingCases: cases, processCases: cases});
             break;
         }
     }
