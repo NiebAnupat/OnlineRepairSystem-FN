@@ -67,7 +67,7 @@ export default function Index() {
                             {currentTime}
                         </Text>
                     </Flex>
-                    <Flex gap={'xl'} mt={'xl'}>
+                <Flex gap={'xl'} mt={'xl'}>
                         <LastCaseCard lastCase={lastCase} caseLoaded={caseLoaded}/>
                         <PendingCard count={caseCount} caseLoaded={caseLoaded}/>
                     </Flex>

@@ -56,7 +56,6 @@ export const Index = () => {
     }, [])
 
     useEffect(() => {
-        console.log({allCase})
         setFilterCases(allCase as Case[])
     }, [allCase])
 

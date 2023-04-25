@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
                         break;
                     case "admin":
                         if (request.nextUrl.pathname === "/") {
-                            return NextResponse.redirect(new URL("/Admin", request.url));
+                            return NextResponse.redirect(new URL("/Admin/Manage/Repair", request.url));
                         } else if (pathArr[1] !== "Admin" && pathArr[1] !== 'User') {
                             return NextResponse.redirect(new URL("/", request.url));
                         }

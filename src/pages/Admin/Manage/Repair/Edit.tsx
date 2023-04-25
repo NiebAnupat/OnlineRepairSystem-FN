@@ -164,12 +164,20 @@ export const Edit = ({selectedCase}: props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const caseID = context.query.caseID;
-    const res = await useAxios.get(`cases/${caseID}?getImages=true`);
-    if (res.status === 200) {
-        console.log(res.data)
+    try {
+        const res = await useAxios.get(`cases/${caseID}?getImages=true`);
+        if (res.status === 200) {
+            console.log(res.data)
+            return {
+                props: {
+                    selectedCase: res.data as Case
+                }
+            }
+        }
+    } catch (e) {
         return {
             props: {
-                selectedCase: res.data as Case
+                selectedCase: []
             }
         }
     }

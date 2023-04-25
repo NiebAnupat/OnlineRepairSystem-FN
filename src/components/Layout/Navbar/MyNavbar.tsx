@@ -31,21 +31,21 @@ export default function MyNavbar() {
             label: "หน้าหลัก",
             color: "blue",
             colorLevel: 6,
-            href: "/Employee",
+            href: "/User",
         },
         {
             icon: <IconTableOptions/>,
             label: "แจ้งซ่อม",
             color: "green",
             colorLevel: 6,
-            href: "/Employee/repairing",
+            href: "/User/repairing",
         },
         {
             icon: <IconHistory/>,
             label: "ประวัติ",
             color: "violet",
             colorLevel: 5,
-            href: "/Employee/history",
+            href: "/User/history",
         },
         {
             icon: <IconUser/>,
@@ -85,13 +85,6 @@ export default function MyNavbar() {
 
     const navLinkData_Admin: NavLinkData[] = [
         {
-            icon: <IconHome/>,
-            label: "หน้าหลัก",
-            color: "blue",
-            colorLevel: 6,
-            href: "/Admin",
-        },
-        {
             icon: <IconTableOptions/>,
             label: "จัดการข้อมูลการแจ้งซ่อม",
             color: "green",
@@ -103,11 +96,7 @@ export default function MyNavbar() {
             label: "จัดการข้อมูลผู้ใช้งาน",
             color: "violet",
             colorLevel: 6,
-            links: [
-                {label: 'ข้อมูลพนักงาน', link: '/Admin/Manage/Employee'},
-                {label: 'ข้อมูลช่างซ่อม', link: '/Admin/Manage/Worker'},
-                {label: 'ข้อมูลสิทธิ์ผู้ใช้', link: '/Admin/Manage/Role'},
-            ]
+            href : '/Admin/Manage/User',
         },
         {
             icon: <IconUser/>,
