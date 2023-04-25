@@ -2,9 +2,12 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "18.16.0"
+  },
   "scripts": {
     "dev": "cls & next dev",
-    "build": "next build",
+    "build": "next build && tsc --project tsconfig.server.json",
     "start": "next start",
     "lint": "next lint"
   },

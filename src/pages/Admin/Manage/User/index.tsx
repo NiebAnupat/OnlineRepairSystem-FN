@@ -19,12 +19,15 @@ import {IconSearch} from "@tabler/icons-react";
 import {BufferToBase64} from "@/lib/helper";
 import useAxios from "@/lib/useAxios";
 import {notifications} from "@mantine/notifications";
-import {initUser} from "@/lib/userStore";
+import {initUser, useUserStore} from "@/lib/userStore";
 import {useRouter} from "next/router";
+import {modals} from "@mantine/modals";
 
 export const Index = () => {
 
     const router = useRouter();
+
+    const currentUserID = useUserStore(state => state.user?.user_id);
 
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [avatar, setAvatar] = useState<Buffer>(selectedUser?.avatar as Buffer);
@@ -119,6 +122,58 @@ export const Index = () => {
         }
     }
 
+    const deleteUser = async () => {
+
+        modals.openConfirmModal({
+            title: 'ยืนยันการลบข้อมูล',
+            children: 'คุณต้องการลบข้อมูลนผู้ใช้งานนี้ใช่หรือไม่',
+            radius: 'lg',
+            size: 'md',
+            padding: 'xl',
+            labels: {
+                confirm: 'ยืนยัน',
+                cancel: 'ยกเลิก'
+            },
+            color: 'red',
+            async onConfirm() {
+                try {
+
+                    if (currentUserID === selectedUser?.user_id) {
+                        notifications.show({
+                            title: 'เกิดข้อผิดพลาด',
+                            message: 'ไม่สามารถลบข้อมูลของตัวเองได้',
+                            color: 'red',
+                        })
+                        return;
+                    }
+
+                    const res = await useAxios.delete(`users/${selectedUser?.user_id}`);
+                    if (res.status == 200) {
+                        notifications.show({
+                            title: 'ลบข้อมูลสำเร็จ',
+                            message: 'ลบข้อมูลสำเร็จ',
+                            color: 'green',
+                        })
+                        setSearchQuery('');
+                        setSelectedUser(null);
+                        setPassword('');
+                        if (searchInputRef.current) {
+                            searchInputRef.current.value = '';
+                            searchInputRef.current.focus();
+                        }
+                        initUser();
+                    }
+                } catch (e) {
+                    notifications.show({
+                        title: 'เกิดข้อผิดพลาด',
+                        message: 'ไม่สามารถลบข้อมูลได้',
+                        color: 'red',
+                    })
+                }
+            }
+        })
+    }
+
 
     return (
         <>
@@ -207,7 +262,9 @@ export const Index = () => {
                                           align={'end'}>กรุณากรอกข้อมูลให้ครบถ้วน</Text>
                                     <Center mt={'xl'}>
                                         <Button variant={'outline'} color={'red'} radius={'md'}
-                                        >ยกเลิก</Button>
+                                                disabled={!selectedUser?.username}
+                                                onClick={deleteUser}
+                                        >ลบผู้ใช้งาน</Button>
                                         <Button ml={'md'} radius={'md'} variant={'gradient'} type={'submit'}
                                                 gradient={{from: 'indigo', to: 'cyan'}}
                                                 disabled={!selectedUser?.username || !password || password?.length < 6}
