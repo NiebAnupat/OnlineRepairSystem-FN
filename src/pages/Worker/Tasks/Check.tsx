@@ -1,6 +1,5 @@
 import {
     ActionIcon,
-    Badge,
     Box, Center,
     Container,
     Divider, Flex, Pagination,
@@ -15,13 +14,14 @@ import {IconArrowAutofitDown, IconSearch} from "@tabler/icons-react";
 import React, {useEffect, useState} from "react";
 import {useCaseStore} from "@/lib/caseStore";
 import {useDebouncedState, usePagination} from "@mantine/hooks";
-import Case, {StatusID, StatusName} from "@/models/Case";
+import Case, {StatusID} from "@/models/Case";
 import showDetail from "@/lib/detailModal";
 import moment from "moment/moment";
 import {useUserStore} from "@/lib/userStore";
 import useAxios from "@/lib/useAxios";
 import {modals} from "@mantine/modals";
 import {notifications} from "@mantine/notifications";
+import StatusBadge from "@/components/helper/StatusBadge";
 
 export const Check = () => {
     const user_id = useUserStore((state) => state.user?.user_id)
@@ -57,37 +57,6 @@ export const Check = () => {
 
     }, [])
 
-    // render status chips
-    const renderStatus = (statusID: number) => {
-        // return Chip different color based on statusID
-        switch (statusID) {
-            case StatusID.PENDING:
-                return (
-                    <Badge color="yellow" size={'lg'}>
-                        {StatusName.PENDING}
-                    </Badge>
-                )
-            case StatusID.IN_PROGRESS :
-                return (
-                    <Badge color="indigo" size={'lg'}>
-                        {StatusName.IN_PROGRESS}
-                    </Badge>
-                )
-            case StatusID.REPAIRING:
-                return (
-                    <Badge color="blue" size={'lg'}>
-                        {StatusName.REPAIRING}
-                    </Badge>
-                )
-            default:
-                return (
-                    <Badge color="dimmed" size={'lg'}>
-                        {StatusName.UNKNOWN}
-                    </Badge>
-                )
-
-        }
-    }
 
     const search = () => {
         const filtered: Case[] | undefined = pendingCases?.filter((c) => {
@@ -195,7 +164,8 @@ export const Check = () => {
                                                     <td style={{textAlign: 'center'}}>{item.case_id}</td>
                                                     <td style={{textAlign: 'left'}}>{item.name_case}</td>
                                                     <td style={{textAlign: 'center'}}>{new Date(item.date_case).toLocaleDateString('th-TH')}</td>
-                                                    <td style={{textAlign: 'center'}}>{renderStatus(item.status_id)}</td>
+                                                    <td style={{textAlign: 'center'}}>{<StatusBadge
+                                                        status_id={item.status_id}/>}</td>
                                                     <td style={{textAlign: 'center'}}>
                                                         <Flex px={'xl'} justify={'space-around'}>
                                                             <Tooltip label={'ดูรายละเอียด'} color={'violet.4'} withArrow

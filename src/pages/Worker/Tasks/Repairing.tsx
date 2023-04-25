@@ -1,6 +1,5 @@
 import {
     ActionIcon,
-    Badge,
     Box, Center,
     Container,
     Divider,
@@ -14,14 +13,21 @@ import {
     Tooltip
 } from "@mantine/core";
 import React, {useEffect, useState} from "react";
-import {useCaseStore} from "@/lib/caseStore";
+import { useCaseStore} from "@/lib/caseStore";
 import {useDebouncedState, usePagination} from "@mantine/hooks";
-import Case, {StatusID, StatusName} from "@/models/Case";
+import Case from "@/models/Case";
 import moment from "moment/moment";
-import {IconArrowAutofitDown, IconEditCircle, IconSearch} from "@tabler/icons-react";
+import { IconEditCircle, IconSearch} from "@tabler/icons-react";
 import showDetail from "@/lib/detailModal";
+import {modals} from "@mantine/modals";
+import UpdateCaseStatus from "@/components/Modal/UpdateCaseStatus";
+import StatusBadge from "@/components/helper/StatusBadge";
+import {useUserStore} from "@/lib/userStore";
 
 export const Repairing = () => {
+
+    const user_id = useUserStore((state) => state.user?.user_id);
+
     const isLoaded = useCaseStore((state) => state.isLoaded);
     const processCases = useCaseStore((state) => state.processCases);
     const filterCases = useCaseStore((state) => state.filterCases);
@@ -37,6 +43,7 @@ export const Repairing = () => {
     const [searchQuery, setSearchQuery] = useDebouncedState('', 250);
 
     useEffect(() => {
+
         const windowHeight = window.innerHeight;
         if (windowHeight < 700) {
             setItemsPerPage(4)
@@ -51,10 +58,11 @@ export const Repairing = () => {
             setItemsPerPage(8)
             setImageHeight(350)
         }
-
-        setFilterCases(processCases as Case[])
-
     }, [])
+
+    useEffect(() => {
+        setFilterCases(processCases as Case[])
+    }, [processCases])
 
     const search = () => {
         const filtered: Case[] | undefined = processCases?.filter((c) => {
@@ -75,37 +83,16 @@ export const Repairing = () => {
         }
     }, [searchQuery])
 
-    // render status chips
-    const renderStatus = (statusID: number) => {
-        // return Chip different color based on statusID
-        switch (statusID) {
-            case StatusID.PENDING:
-                return (
-                    <Badge color="yellow" size={'lg'}>
-                        {StatusName.PENDING}
-                    </Badge>
-                )
-            case StatusID.IN_PROGRESS :
-                return (
-                    <Badge color="indigo" size={'lg'}>
-                        {StatusName.IN_PROGRESS}
-                    </Badge>
-                )
-            case StatusID.REPAIRING:
-                return (
-                    <Badge color="blue" size={'lg'}>
-                        {StatusName.REPAIRING}
-                    </Badge>
-                )
-            default:
-                return (
-                    <Badge color="dimmed" size={'lg'}>
-                        {StatusName.UNKNOWN}
-                    </Badge>
-                )
-
-        }
+    const updateCaseStatus = (selectedCase: Case) => {
+        modals.open({
+            title: 'เปลี่ยนสถานะรายการ',
+            padding: 'xl',
+            size: 'lg',
+            radius: 'lg',
+            children: (<UpdateCaseStatus selectedCase={selectedCase} user_id={user_id ? user_id : ''}/>)
+        })
     }
+
     return (
         <>
             <Box bg={"gray.1"} h={"100%"} pt={'xl'}>
@@ -113,7 +100,6 @@ export const Repairing = () => {
                     <Title order={2}>งานที่กำลังดำเนินการ</Title>
                     <Divider my={'md'}/>
                     <Container>
-
                         <Container size={'70%'}>
                             <TextInput placeholder={'ค้นหา...'} radius={'lg'} icon={<IconSearch/>}
                                        description={'สามารถค้นหาด้วย ชื่อ รหัส สถานะ สถานที่ ฯลฯ'}
@@ -151,7 +137,8 @@ export const Repairing = () => {
                                                     <td style={{textAlign: 'center'}}>{item.case_id}</td>
                                                     <td style={{textAlign: 'left'}}>{item.name_case}</td>
                                                     <td style={{textAlign: 'center'}}>{new Date(item.date_case).toLocaleDateString('th-TH')}</td>
-                                                    <td style={{textAlign: 'center'}}>{renderStatus(item.status_id)}</td>
+                                                    <td style={{textAlign: 'center'}}>{<StatusBadge
+                                                        status_id={item.status_id}/>}</td>
                                                     <td style={{textAlign: 'center'}}>
                                                         <Flex px={'xl'} justify={'space-around'}>
                                                             <Tooltip label={'ดูรายละเอียด'} color={'violet.4'} withArrow
@@ -177,6 +164,7 @@ export const Repairing = () => {
                                                                 <ActionIcon mx={'auto'} variant="subtle" radius={'xl'}
                                                                             size={'lg'}
                                                                             color={'green.9'}
+                                                                            onClick={() => updateCaseStatus(item)}
                                                                 >
                                                                     <IconEditCircle size="1.125rem"/>
                                                                 </ActionIcon>

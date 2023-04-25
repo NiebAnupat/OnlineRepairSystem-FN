@@ -9,4 +9,5 @@ const BufferToBase64 = (buffer: Buffer ) => {
     return `data:${mimeType};base64,${b64}`
 };
 
+
 export {bufferToUrl, BufferToBase64};

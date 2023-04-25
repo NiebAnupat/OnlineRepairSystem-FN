@@ -1,6 +1,5 @@
 import {
     ActionIcon,
-    Badge,
     Box,
     Center,
     Container,
@@ -14,12 +13,13 @@ import {
     Title, Tooltip
 } from "@mantine/core";
 import React, {useEffect, useState} from "react";
-import {IconArrowAutofitDown, IconEditCircle, IconSearch} from "@tabler/icons-react";
+import { IconSearch} from "@tabler/icons-react";
 import {useCaseStore} from "@/lib/caseStore";
-import Case, {StatusID, StatusName} from "@/models/Case";
+import Case from "@/models/Case";
 import {useDebouncedState, usePagination} from "@mantine/hooks";
 import showDetail from "@/lib/detailModal";
 import moment from "moment";
+import StatusBadge from "@/components/helper/StatusBadge";
 
 export const History = () => {
     const isLoaded = useCaseStore((state) => state.isLoaded);
@@ -51,10 +51,11 @@ export const History = () => {
             setItemsPerPage(8)
             setImageHeight(350)
         }
-
-        setFilterCases(ownCases as Case[])
-
     }, [])
+
+    useEffect(() => {
+        setFilterCases(ownCases as Case[])
+    }, [ownCases])
 
     const search = () => {
         const filtered: Case[] | undefined = ownCases?.filter((c) => {
@@ -75,43 +76,6 @@ export const History = () => {
         }
     }, [searchQuery])
 
-    // render status chips
-    const renderStatus = (statusID: number) => {
-        // return Chip different color based on statusID
-        switch (statusID) {
-            case StatusID.PENDING:
-                return (
-                    <Badge color="yellow" size={'lg'}>
-                        {StatusName.PENDING}
-                    </Badge>
-                )
-            case StatusID.IN_PROGRESS :
-                return (
-                    <Badge color="indigo" size={'lg'}>
-                        {StatusName.IN_PROGRESS}
-                    </Badge>
-                )
-            case StatusID.REPAIRING:
-                return (
-                    <Badge color="blue" size={'lg'}>
-                        {StatusName.REPAIRING}
-                    </Badge>
-                )
-            case StatusID.REPAIRED:
-                return (
-                    <Badge color="green" size={'lg'}>
-                        {StatusName.REPAIRED}
-                    </Badge>
-                )
-            default:
-                return (
-                    <Badge color="dimmed" size={'lg'}>
-                        {StatusName.UNKNOWN}
-                    </Badge>
-                )
-
-        }
-    }
 
     return (
         <>
@@ -158,7 +122,8 @@ export const History = () => {
                                                     <td style={{textAlign: 'center'}}>{item.case_id}</td>
                                                     <td style={{textAlign: 'left'}}>{item.name_case}</td>
                                                     <td style={{textAlign: 'center'}}>{new Date(item.date_case).toLocaleDateString('th-TH')}</td>
-                                                    <td style={{textAlign: 'center'}}>{renderStatus(item.status_id)}</td>
+                                                    <td style={{textAlign: 'center'}}>{<StatusBadge
+                                                        status_id={item.status_id}/>}</td>
                                                     <td style={{textAlign: 'center'}}>
                                                         <Flex px={'xl'} justify={'space-around'}>
                                                             <Tooltip label={'ดูรายละเอียด'} color={'violet.4'} withArrow
@@ -172,21 +137,6 @@ export const History = () => {
                                                                             color={'indigo.9'}
                                                                             onClick={() => showDetail(item.case_id, imageHeight)}>
                                                                     <IconSearch size="1.125rem"/>
-                                                                </ActionIcon>
-                                                            </Tooltip>
-                                                            <Tooltip label={'แก้ไขสถานะ'} color={'green.5'}
-                                                                     withArrow
-                                                                     position="right"
-                                                                     transitionProps={{
-                                                                         transition: 'scale-x',
-                                                                         duration: 300
-                                                                     }}>
-                                                                {/* TODO : add change status modal */}
-                                                                <ActionIcon mx={'auto'} variant="subtle" radius={'xl'}
-                                                                            size={'lg'}
-                                                                            color={'green.9'}
-                                                                >
-                                                                    <IconEditCircle size="1.125rem"/>
                                                                 </ActionIcon>
                                                             </Tooltip>
                                                         </Flex>

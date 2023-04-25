@@ -95,6 +95,14 @@ interface LastCase {
     status_id: StatusID;
 }
 
+interface TecUpdateDUO {
+    tec_id: string;
+    status_id: number;
+    date_assign?: string;
+    date_sent?: string;
+    date_close?: string;
+}
+
 export {StatusID, StatusName, getStatusColor, getStatusName, getStatusColorByID};
-export type {LastCase};
+export type {LastCase,TecUpdateDUO};
 export default Case;

@@ -1,7 +1,6 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import {
     ActionIcon,
-    Badge,
     Center,
     Pagination,
     Paper,
@@ -10,9 +9,10 @@ import {
     Tooltip
 } from '@mantine/core';
 import {usePagination} from '@mantine/hooks';
-import Case, {StatusID, StatusName} from "@/models/Case";
+import Case from "@/models/Case";
 import { IconSearch} from "@tabler/icons-react";
 import showDetail from "@/lib/detailModal";
+import StatusBadge from "@/components/helper/StatusBadge";
 
 interface OwnProps {
     cases: Case[] | undefined
@@ -49,38 +49,6 @@ const SimpleCaseTable: FunctionComponent<Props> = (props) => {
     }, [])
 
 
-    // render status chips
-    const renderStatus = (statusID: number) => {
-        // return Chip different color based on statusID
-        switch (statusID) {
-            case StatusID.PENDING:
-                return (
-                    <Badge color="yellow" size={'lg'}>
-                        {StatusName.PENDING}
-                    </Badge>
-                )
-            case StatusID.IN_PROGRESS :
-                return (
-                    <Badge color="indigo" size={'lg'}>
-                        {StatusName.IN_PROGRESS}
-                    </Badge>
-                )
-            case StatusID.REPAIRING:
-                return (
-                    <Badge color="blue" size={'lg'}>
-                        {StatusName.REPAIRING}
-                    </Badge>
-                )
-            default:
-                return (
-                    <Badge color="dimmed" size={'lg'}>
-                        {StatusName.UNKNOWN}
-                    </Badge>
-                )
-
-        }
-    }
-
 
     return (
         <>
@@ -116,7 +84,7 @@ const SimpleCaseTable: FunctionComponent<Props> = (props) => {
                                             <td style={{textAlign: 'center'}}>{item.case_id}</td>
                                             <td style={{textAlign: 'left'}}>{item.name_case}</td>
                                             <td style={{textAlign: 'center'}}>{new Date(item.date_case).toLocaleDateString('th-TH')}</td>
-                                            <td style={{textAlign: 'center'}}>{renderStatus(item.status_id)}</td>
+                                            <td style={{textAlign: 'center'}}>{<StatusBadge status_id={item.status_id}/>}</td>
                                             <td style={{textAlign: 'center'}}>
                                                 <Tooltip label={'ดูรายละเอียด'} color={'violet.4'} withArrow
                                                          position="right"
