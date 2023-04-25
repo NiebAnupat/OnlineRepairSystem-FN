@@ -108,9 +108,9 @@ export const History = () => {
                                     <thead>
                                     <tr>
                                         <th style={{width: '10%', textAlign: 'center'}}>รหัส</th>
-                                        <th style={{textAlign: 'center', width: '40%'}}>หัวข้อ</th>
+                                        <th style={{textAlign: 'center', width: '50%'}}>หัวข้อ</th>
                                         <th style={{textAlign: 'center', width: '15%'}}>วันที่</th>
-                                        <th style={{textAlign: 'center', width: '15%'}}>สถานะ</th>
+                                        <th style={{textAlign: 'center', width: '10%'}}>สถานะ</th>
                                         <th style={{textAlign: 'center'}}>ดำเนินการ</th>
                                     </tr>
                                     </thead>

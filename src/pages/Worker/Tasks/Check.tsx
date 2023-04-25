@@ -57,6 +57,10 @@ export const Check = () => {
 
     }, [])
 
+    useEffect(() => {
+        setFilterCases(pendingCases as Case[])
+    }, [pendingCases])
+
 
     const search = () => {
         const filtered: Case[] | undefined = pendingCases?.filter((c) => {
