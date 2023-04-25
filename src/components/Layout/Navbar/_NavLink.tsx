@@ -33,10 +33,6 @@ export default function NavLink({icon, label, color, href, colorLevel, links, in
         }
     };
 
-    useEffect(() => {
-        console.log('links', links)
-    }, []);
-
     const items = (hasLinks ? links : []).map((link) => (
         <Text
             key={link.label}

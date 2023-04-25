@@ -1,4 +1,4 @@
-import Case, {LastCase} from "@/models/Case";
+import Case, {LastCase, StatusID} from "@/models/Case";
 import {create} from "zustand";
 import withQuery from "with-query";
 import {useUserStore} from "@/lib/userStore";
@@ -8,11 +8,13 @@ interface CaseStore {
     lastCase: LastCase | null;
     filterCases: Case[] | null;
     pendingCases: Case[] | null;
+    processCases: Case[] | null;
     isLoaded: boolean;
     setCases: (cases: Case[]) => void;
     setLastCase: (lastCase: LastCase) => void;
     setFilterCases: (filterCases: Case[]) => void;
     setPendingCases: (pendingCases: Case[]) => void;
+    setProcessCases: (processCases: Case[]) => void;
     setLoaded: (isLoaded: boolean) => void;
 }
 
@@ -22,6 +24,7 @@ export const useCaseStore = create<CaseStore>((set) => ({
     lastCase: null,
     filterCases: [],
     pendingCases: [],
+    processCases: [],
     isLoaded: false,
     setCases: (newCases: Case[]) => {
         set({cases: newCases});
@@ -34,6 +37,9 @@ export const useCaseStore = create<CaseStore>((set) => ({
     },
     setPendingCases: (newPendingCases: Case[]) => {
         set({pendingCases: newPendingCases});
+    },
+    setProcessCases: (newProcessCases: Case[]) => {
+        set({processCases: newProcessCases});
     },
     setLoaded: (isLoaded: boolean) => {
         set({isLoaded});
@@ -83,7 +89,8 @@ export const initialCases = async () => {
         }
         case 'worker': {
             const pendingCases = await fetch(withQuery(`${baseURL}cases/by`, { status: '1'})).then(res => res.json());
-            useCaseStore.setState({cases,filterCases:pendingCases, pendingCases});
+            const processCS = cases?.filter(c => c.status_id !== StatusID.PENDING && c.status_id !== StatusID.REPAIRED);
+            useCaseStore.setState({cases,filterCases:pendingCases, pendingCases, processCases: processCS});
             break;
         }
     }

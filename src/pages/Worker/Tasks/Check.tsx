@@ -6,7 +6,7 @@ import {
     Divider, Flex, Pagination,
     Paper, Skeleton,
     Space,
-     Table,
+    Table,
     Text,
     TextInput,
     Title, Tooltip,
@@ -25,6 +25,7 @@ import {notifications} from "@mantine/notifications";
 
 export const Check = () => {
     const user_id = useUserStore((state) => state.user?.user_id)
+    const isLoaded = useCaseStore((state) => state.isLoaded);
     const pendingCases: Case[] | null = useCaseStore((state) => state.pendingCases);
     const filterCases: Case[] | null = useCaseStore((state) => state.filterCases);
     const setFilterCases = useCaseStore((state) => state.setFilterCases);
@@ -34,7 +35,7 @@ export const Check = () => {
 
     // Pagination
     const [itemsPerPage, setItemsPerPage] = useState<number>(3);
-    const [imageHeight, setImageHeight] = useState<number>(175);
+    const [imageHeight, setImageHeight] = useState<number>(150);
 
     const [searchQuery, setSearchQuery] = useDebouncedState('', 250);
 
@@ -42,7 +43,7 @@ export const Check = () => {
         const windowHeight = window.innerHeight;
         if (windowHeight < 700) {
             setItemsPerPage(4)
-            setImageHeight(175)
+            setImageHeight(150)
         } else if (windowHeight < 800) {
             setItemsPerPage(5)
             setImageHeight(200)
@@ -152,19 +153,19 @@ export const Check = () => {
 
     return (
         <>
-            <Skeleton visible={false} w={'100%'} h={'100%'} radius={'lg'}>
-                <Box bg={"gray.1"} h={"100%"} pt={'xl'}>
-                    <Container size={"90%"}>
-                        <Title order={2}>รายการแจ้งซ่อมใหม่</Title>
-                        <Divider my={'md'}/>
-                        <Container>
-                            <Container size={'70%'}>
-                                <TextInput placeholder={'ค้นหา...'} radius={'lg'} icon={<IconSearch/>}
-                                           description={'สามารถค้นหาด้วย ชื่อ รหัส สถานะ สถานที่ ฯลฯ'}
-                                           onChange={(e) => setSearchQuery(e.currentTarget.value)}
-                                />
-                            </Container>
-                            <Space h={'md'}/>
+            <Box bg={"gray.1"} h={"100%"} pt={'xl'}>
+                <Container size={"90%"}>
+                    <Title order={2}>รายการแจ้งซ่อมใหม่</Title>
+                    <Divider my={'md'}/>
+                    <Container>
+                        <Container size={'70%'}>
+                            <TextInput placeholder={'ค้นหา...'} radius={'lg'} icon={<IconSearch/>}
+                                       description={'สามารถค้นหาด้วย ชื่อ รหัส สถานะ สถานที่ ฯลฯ'}
+                                       onChange={(e) => setSearchQuery(e.currentTarget.value)}
+                            />
+                        </Container>
+                        <Space h={'md'}/>
+                        <Skeleton visible={!isLoaded} w={'100%'} h={'70vh'} radius={'lg'}>
                             <Paper
                                 p={'lg'}
                                 radius='lg'
@@ -242,10 +243,10 @@ export const Check = () => {
                                     />
                                 </Center>
                             </Paper>
-                        </Container>
+                        </Skeleton>
                     </Container>
-                </Box>
-            </Skeleton>
+                </Container>
+            </Box>
         </>
     );
 };
