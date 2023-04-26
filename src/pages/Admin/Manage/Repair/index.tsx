@@ -13,14 +13,17 @@ import {
     Tooltip
 } from "@mantine/core";
 import React, {useEffect, useState} from "react";
-import {useCaseStore} from "@/lib/caseStore";
+import {initialCases, useCaseStore} from "@/lib/caseStore";
 import {useDebouncedState, usePagination} from "@mantine/hooks";
 import Case from "@/models/Case";
 import moment from "moment/moment";
-import {IconEditCircle, IconSearch} from "@tabler/icons-react";
+import {IconEditCircle, IconSearch, IconTrash} from "@tabler/icons-react";
 import StatusBadge from "@/components/helper/StatusBadge";
 import showDetail from "@/components/Modal/detailModal";
 import {useRouter} from "next/router";
+import useAxios from "@/lib/useAxios";
+import {notifications} from "@mantine/notifications";
+import {modals} from "@mantine/modals";
 
 export const Index = () => {
     const router = useRouter();
@@ -78,6 +81,40 @@ export const Index = () => {
         }
     }, [searchQuery])
 
+    const deleteCase = async (id: number) => {
+        modals.openConfirmModal({
+            title: 'ยืนยันการลบ',
+            radius: 'lg',
+            size: 'md',
+            padding: 'xl',
+            children: `คุณต้องการลบรายการหมายเลข ${id} ใช่หรือไม่?`,
+            labels: {
+                confirm: 'ยืนยัน',
+                cancel: 'ยกเลิก'
+            },
+            onConfirm: async () => {
+                try {
+                    const res = await useAxios.delete(`cases/${id}`)
+                    if (res.status === 200) {
+                        notifications.show({
+                            title: 'ลบข้อมูลสำเร็จ',
+                            message: `ลบข้อมูลการแจ้งซ่อมหมายเลข ${id} สำเร็จ`,
+                            color: 'green',
+                        })
+                        initialCases()
+                    }
+
+                } catch (e) {
+                    notifications.show({
+                        title: 'ลบข้อมูลไม่สำเร็จ',
+                        message: `ลบข้อมูลการแจ้งซ่อมหมายเลข ${id} ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง`,
+                        color: 'red',
+                    })
+                }
+            }
+
+        })
+    }
 
 
     return (
@@ -141,6 +178,21 @@ export const Index = () => {
                                                                     <IconSearch size="1.125rem"/>
                                                                 </ActionIcon>
                                                             </Tooltip>
+                                                            <Tooltip label={'ลบข้อมูล'} color={'red.5'} withArrow
+                                                                     position="right"
+                                                                     transitionProps={{
+                                                                         transition: 'scale-x',
+                                                                         duration: 300
+                                                                     }}>
+                                                                <ActionIcon mx={'auto'} variant="subtle" radius={'xl'}
+                                                                            size={'lg'}
+                                                                            color={'red.7'}
+                                                                            onClick={() => deleteCase(item.case_id)}
+                                                                >
+                                                                    <IconTrash size="1.125rem"/>
+                                                                </ActionIcon>
+                                                            </Tooltip>
+
                                                             <Tooltip label={'แก้ไขข้อมูล'} color={'lime.5'} withArrow
                                                                      position="right"
                                                                      transitionProps={{
