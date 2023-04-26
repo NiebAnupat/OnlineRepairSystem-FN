@@ -16,8 +16,8 @@ export default function Index() {
     const cases: Case[] | null = useCaseStore((state) => state.cases);
     const lastCase: LastCase | null = useCaseStore((state) => state.lastCase);
     // const lastCase = null;
-    const showCase: Case[] | undefined = cases?.filter((c) => c.status_id !== StatusID.REPAIRED);
-    const caseCount = showCase!.length | 0;
+    const showCase: Case[] | undefined = cases!.length > 0 ? cases?.filter((c) => c.status_id !== StatusID.REPAIRED) : undefined;
+    const caseCount = showCase && showCase.length | 0;
 
 
     const [currentTime, setCurrentTime] = useState<string>(new Date().toLocaleTimeString('th-TH', {
@@ -69,7 +69,7 @@ export default function Index() {
                     </Flex>
                 <Flex gap={'xl'} mt={'xl'}>
                         <LastCaseCard lastCase={lastCase} caseLoaded={caseLoaded}/>
-                        <PendingCard count={caseCount} caseLoaded={caseLoaded}/>
+                        <PendingCard count={caseCount || 0} caseLoaded={caseLoaded}/>
                     </Flex>
                     <Divider my={'1.5rem'}/>
                     <Title order={3}>รายละเอียด</Title>

@@ -70,7 +70,7 @@ const LastCaseCard: FunctionComponent<Props> = (props) => {
 
                         </Paper>
                     ) : (
-                        <Paper p={"lg"} radius="lg" shadow="md" sx={{
+                        <Paper p={"lg"} radius="lg" shadow="md" h={'150px'} sx={{
                             "&:hover": {
                                 "boxShadow": "4px 12px 41px 0px rgba(50,0,150,0.1)"
                             }

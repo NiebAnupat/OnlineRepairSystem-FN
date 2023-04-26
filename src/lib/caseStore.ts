@@ -89,7 +89,7 @@ export const initialCases = async () => {
         }
         case 'worker': {
             const pendingCases = await fetch(withQuery(`${baseURL}cases/by`, {status: '1'})).then(res => res.json());
-            const processCS = cases?.filter(c => c.status_id !== StatusID.PENDING && c.status_id !== StatusID.REPAIRED);
+            const processCS = cases!.length > 0 ? cases?.filter(c => c.status_id !== StatusID.PENDING && c.status_id !== StatusID.REPAIRED) : [] as Case[];
             useCaseStore.setState({cases, filterCases: pendingCases, pendingCases, processCases: processCS});
             break;
         }

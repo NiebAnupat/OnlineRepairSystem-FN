@@ -131,7 +131,7 @@ export const Repairing = () => {
                                     </thead>
                                     <tbody>
                                     {
-                                        filterCases?.slice().reverse().slice((pagination.active - 1) * itemsPerPage, pagination.active * itemsPerPage).map((item, index) => {
+                                        filterCases!.length > 0 ? filterCases!.slice().reverse().slice((pagination.active - 1) * itemsPerPage, pagination.active * itemsPerPage).map((item, index) => {
                                             return (
                                                 <tr key={index}>
                                                     <td style={{textAlign: 'center'}}>{item.case_id}</td>
@@ -173,7 +173,10 @@ export const Repairing = () => {
                                                     </td>
                                                 </tr>
                                             )
-                                        })
+                                        }) :
+                                            <tr>
+                                                <td colSpan={5} style={{textAlign: 'center'}}>ไม่พบข้อมูล</td>
+                                            </tr>
                                     }
                                     </tbody>
                                 </Table>
