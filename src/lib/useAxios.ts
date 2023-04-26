@@ -1,7 +1,7 @@
 import axios, {AxiosInstance} from 'axios';
 
 const useAxios: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:4000/',
+  baseURL: 'https://server.anupat-dav.com/',
 });
 
 export default useAxios;

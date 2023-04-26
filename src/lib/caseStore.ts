@@ -46,7 +46,7 @@ export const useCaseStore = create<CaseStore>((set) => ({
     }
 }));
 
-const baseURL = "http://localhost:4000/";
+const baseURL = "https://server.anupat-dav.com/";
 const fetchCases = async (): Promise<Case[] | null> => {
     try {
         const user_id = await useUserStore.getState().user?.user_id;

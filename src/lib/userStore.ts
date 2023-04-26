@@ -12,7 +12,7 @@ interface UserStore {
 }
 
 const initialUser = async (): Promise<User | null> => {
-    const baseURL = "http://localhost:4000/";
+    const baseURL = "https://server.anupat-dav.com/";
     const {token} = parseCookies();
     if (!token) {
         return null;

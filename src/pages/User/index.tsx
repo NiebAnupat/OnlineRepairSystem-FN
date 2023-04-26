@@ -84,8 +84,7 @@ export default function Index() {
             }
 
 
-        } catch (e) {
-
+        } catch (e : any) {
             if (e instanceof AxiosError) {
                 if (e.response?.status == 401) {
                     form.setFieldError('password', 'รหัสผ่านไม่ถูกต้อง');
@@ -93,7 +92,6 @@ export default function Index() {
                     return;
                 }
             }
-
             notifications.show({
                 title: 'เกิดข้อผิดพลาด',
                 message: 'บันทึกข้อมูลไม่สำเร็จ',
@@ -131,7 +129,7 @@ export default function Index() {
                         })
                         initUser();
                     }
-                } catch (e) {
+                } catch (e : any) {
                     notifications.show({
                         title: 'เกิดข้อผิดพลาด',
                         message: 'ไม่สามารถอัพโหลดรูปภาพได้',

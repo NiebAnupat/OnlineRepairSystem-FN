@@ -17,7 +17,7 @@ import {
 } from "@mantine/core";
 import { IconArrowAutofitDown, IconSearch } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
-import { useCaseStore } from "@/lib/caseStore";
+import { initialCases, useCaseStore } from "@/lib/caseStore";
 import { useDebouncedState, usePagination } from "@mantine/hooks";
 import Case, { StatusID } from "@/models/Case";
 import showDetail from "@/components/Modal/detailModal";
@@ -114,6 +114,7 @@ export const Check = () => {
         message: `คุณได้รับงานหมายเลข ${caseID} แล้ว`,
         color: "teal",
       });
+      initialCases();
     }
   };
 
