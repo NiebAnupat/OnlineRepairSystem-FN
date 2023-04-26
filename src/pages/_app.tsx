@@ -4,8 +4,6 @@ import type {AppProps} from "next/app";
 import {Global, MantineProvider} from "@mantine/core";
 import {ModalsProvider} from '@mantine/modals';
 import {Notifications} from '@mantine/notifications';
-import {DevSupport} from "@react-buddy/ide-toolbox-next";
-import {ComponentPreviews, useInitial} from "@/components/dev";
 import {RouterTransition} from "@/components/Layout/RouterTransition";
 
 function MyFontStyles() {
@@ -68,11 +66,7 @@ export default function App({Component, pageProps}: AppProps) {
 
             <ModalsProvider>
                 <Layout>
-                    <DevSupport ComponentPreviews={ComponentPreviews}
-                                useInitialHook={useInitial}
-                    >
                         <Component {...pageProps}/>
-                    </DevSupport>
                 </Layout>
             </ModalsProvider>
         </MantineProvider>
