@@ -1,10 +1,10 @@
 import { createServer } from 'http'
 import { parse } from 'url'
 import next from 'next'
-
-const port = parseInt(process.env.PORT || '4550', 10)
+const hostname = 'http://anupat-dav.com'
+const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
+const app = next({ dev,hostname,port })
 const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
